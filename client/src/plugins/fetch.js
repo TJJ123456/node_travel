@@ -10,7 +10,9 @@ export async function $fetch(url, options) {
         },
         credentials: 'include',
     }, options)
+    console.log(`${baseUrl}${url}`, finalOptions);
     const response = await fetch(`${baseUrl}${url}`, finalOptions);
+    console.log('333333', response.json);
     if (response.ok) {
         const data = await response.json();
         return data;

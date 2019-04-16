@@ -1,5 +1,5 @@
 <template>
-<h1>helloworld</h1>
+    <router-view></router-view>
 </template>
 <script>
 export default {

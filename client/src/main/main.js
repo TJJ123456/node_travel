@@ -3,7 +3,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 import ManagerHome from '../components/managerHome.vue'
 import Login from '../components/mangerLogin.vue'
-// import router from '../router'
+import AppLayout from '../components/AppLayout.vue'
+import router from '../router'
 import './global-components'
 import state from './state'
 import VueFetch, { $fetch } from '../plugins/fetch'
@@ -19,21 +20,26 @@ Vue.use(VueFetch, {
 });
 Vue.use(VueState, state);
 
+let managerdata = localStorage.getItem('manager')
+if (managerdata) {
+  state.manager = JSON.parse(managerdata).manager;
+}
+
 async function main() {
   try {
     state.user = await $fetch('user');
-    state.manager = await $fetch('manager');
+    if (!state.manager)
+      state.manager = await $fetch('manager1');
   } catch (e) {
     console.warn(e);
   }
 }
 
-
 new Vue({
   el: '#app',
   data: state,
-  render: h => h(ManagerHome),
-  // router
+  render: h => h(AppLayout),
+  router
 })
 
-// main();
+main();

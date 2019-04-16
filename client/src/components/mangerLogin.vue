@@ -59,12 +59,34 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // alert("submit!");
+          this.login();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+    async login() {
+      let data = await this.$fetch("managerlogin", {
+        method: "POST",
+        body: JSON.stringify(this.ruleForm)
+      });
+      if (data.manager === false) {
+        this.resetForm("ruleForm");
+        this.$message.error("账号或密码错误");
+      } else {
+        this.$state.manager = true;
+        localStorage.setItem("manager", JSON.stringify(data));
+        if (this.$route.params.wantedRoute) {
+          this.$router.replace(this.$route.params.wantedRoute);
+        } else {
+          this.$router.replace("/");
+        }
+      }
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   }
 };

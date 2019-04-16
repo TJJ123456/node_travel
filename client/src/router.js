@@ -1,49 +1,47 @@
-// import Vue from 'vue';
-// import VueRouter from 'vue-router';
-// import state from './main/state'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import state from './main/state'
 
-// Vue.use(VueRouter);
+import mangerHome from './components/managerHome.vue';
+import mangerLogin from './components/mangerLogin.vue';
 
-// const routes = [
-//     { path: '/', name: 'home', component: Home },
-//     { path: '/faq', name: 'faq', component: FAQ },
-//     { path: '/login', name: 'login', component: Login, meta: { guest: true } },
-//     {
-//         path: '/tickets', name: 'tickets', component: TicketsLayout, meta: { private: true }, children: [
-//             { path: '', name: 'tickets', component: Tickets },
-//             { path: 'new', name: 'new-ticket', component: NewTicket },
-//             { path: ':id', name: 'ticket', component: Ticket, props: true }
-//         ]
-//     },
-//     { path: '*', component: NotFound },
-// ]
+Vue.use(VueRouter);
 
-// const router = new VueRouter({
-//     routes,
-//     mode: 'history',
-//     scrollBehavior(to, from, savedPosition) {
-//         if (savedPosition) {
-//             return savedPosition
-//         }
-//         if (to.hash) {
-//             return { selector: to.hash }
-//         }
-//         return { x: 0, y: 0 }
-//     },
-// })
+const routes = [
+    { path: '/', name: 'home', component: mangerHome, meta: { manager: true } },
+    { path: '/managerlogin', name: 'managerlogin', component: mangerLogin },
+]
 
-// router.beforeEach((to, from, next) => {
-//     console.log('to', to.name, to.meta);
-//     // if (to.meta.private && !state.user) {
-//     if (to.matched.some(r => r.meta.private) && !state.user) {
-//         next({ name: 'login', params: { wantedRoute: to.fullPath } });
-//         return;
-//     }
-//     if (to.matched.some(r => r.meta.guest) && state.user) {
-//         next({ name: 'home' });
-//         return;
-//     }
-//     next();
-// })
+const router = new VueRouter({
+    routes,
+    mode: 'history',
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        }
+        if (to.hash) {
+            return { selector: to.hash }
+        }
+        return { x: 0, y: 0 }
+    },
+})
 
-// export default router;
+router.beforeEach((to, from, next) => {
+    console.log('to', to.name, to.meta, to.fullPath);
+    // if (to.meta.private && !state.user) {
+    if (to.matched.some(r => r.meta.manager) && !state.manager) {
+        next({ name: 'managerlogin', params: { wantedRoute: to.fullPath } });
+        return;
+    }
+    if (to.matched.some(r => r.meta.private) && !state.user) {
+        next({ name: 'login', params: { wantedRoute: to.fullPath } });
+        return;
+    }
+    if (to.matched.some(r => r.meta.guest) && state.user) {
+        next({ name: 'home' });
+        return;
+    }
+    next();
+})
+
+export default router;
