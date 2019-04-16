@@ -1,0 +1,95 @@
+<template>
+  <div class="container">
+    <div class="login-form">
+      <h1>后台入口</h1>
+      <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" @submit.native.prevent>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="ruleForm.password" v-model="ruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-row type="flex" justify="center">
+            <el-button type="primary" @click="onSubmit('ruleForm')">立即登录</el-button>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
+</template>
+<script>
+import container from "element-ui";
+export default {
+  data() {
+    let validateUsername = (rule, value, callback) => {
+      console.log("1111111", value);
+      if (value === "") {
+        callback(new Error("请输入用户名"));
+      } else {
+        if (this.ruleForm.username !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    let validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.ruleForm.password !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    return {
+      ruleForm: {
+        username: "",
+        password: ""
+      },
+
+      rules: {
+        username: [{ validator: validateUsername, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }]
+      }
+    };
+  },
+  methods: {
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
+  }
+};
+</script>
+<style scoped>
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #faebd7;
+}
+h1 {
+  margin: auto;
+  text-align: center;
+  color: #606266;
+}
+.el-button {
+  margin: 0 40;
+}
+
+.login-form {
+  border-radius: 2px;
+  background-color: #fff;
+  width: 320px;
+  margin: 120px auto;
+  padding: 35px 35px 15px 35px;
+}
+</style>
