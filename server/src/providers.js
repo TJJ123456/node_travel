@@ -8,4 +8,8 @@ const idIndex = {
 export const Users = modelFactory(collectionFactory('users', idIndex))
 export const Tickets = modelFactory(collectionFactory('tickets', idIndex))
 export const Questions = modelFactory(collectionFactory('questions', idIndex))
+export const Foods = modelFactory(collectionFactory('foods', idIndex))
+export const Hotels = modelFactory(collectionFactory('hotels', idIndex))
+export const Spots = modelFactory(collectionFactory('spots', idIndex))
+export const Plans = modelFactory(collectionFactory('plans', idIndex))
 

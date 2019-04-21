@@ -10,9 +10,7 @@ export async function $fetch(url, options) {
         },
         credentials: 'include',
     }, options)
-    console.log(`${baseUrl}${url}`, finalOptions);
     const response = await fetch(`${baseUrl}${url}`, finalOptions);
-    console.log('333333', response.json);
     if (response.ok) {
         const data = await response.json();
         return data;
@@ -26,6 +24,13 @@ export async function $fetch(url, options) {
                 }
             })
         }
+    } else if (response.status === 405) {
+        const text = await response.text();
+        const data = {
+            err: true,
+            msg: text
+        }
+        return data;
     } else {
         const message = await response.text();
         const error = new Error('error');

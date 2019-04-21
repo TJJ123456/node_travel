@@ -1,3 +1,8 @@
+import foodRoute from './routes/foodRoute';
+import hotelRoute from './routes/hotelRoute';
+import spotRoute from './routes/spotRoute';
+import planRoute from './routes/planRoute';
+
 function privateRoute(req, res, next) {
   if (!req.user) {
     res.status(403).send('Unauthorized')
@@ -20,7 +25,10 @@ function sendManagerInfo(req, res) {
 }
 
 export default function (app) {
-
+  app.use('/food', foodRoute);
+  app.use('/hotel', hotelRoute);
+  app.use('/spot', spotRoute);
+  app.use('/plan', planRoute);
   app.get('/user', (req, res) => {
     if (!req.user) {
       res.send('null')

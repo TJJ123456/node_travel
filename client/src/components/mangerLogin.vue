@@ -7,7 +7,7 @@
           <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="ruleForm.password" v-model="ruleForm.password"></el-input>
+          <el-input type="password" v-model="ruleForm.password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-row type="flex" justify="center">
@@ -81,7 +81,7 @@ export default {
         if (this.$route.params.wantedRoute) {
           this.$router.replace(this.$route.params.wantedRoute);
         } else {
-          this.$router.replace("/");
+          this.$router.replace("/manager");
         }
       }
     },

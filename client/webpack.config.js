@@ -45,8 +45,21 @@ module.exports = {
             limit: 10000
           }
         }]
-      }
+      }, {
+        test: /\.less$/,
+        use: [{
+          loader: "style-loader"
+        }, {
+          loader: "css-loader"
+        }, {
+          loader: "less-loader", options: {
+            strictMath: true,
+            noIeCompat: true
+          }
+        }]
+      },
     ]
+
   },
   resolve: {
     alias: {
