@@ -23,7 +23,6 @@ import container from "element-ui";
 export default {
   data() {
     let validateUsername = (rule, value, callback) => {
-      console.log("1111111", value);
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else {
@@ -48,7 +47,6 @@ export default {
         username: "",
         password: ""
       },
-
       rules: {
         username: [{ validator: validateUsername, trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }]

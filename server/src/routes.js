@@ -2,6 +2,7 @@ import foodRoute from './routes/foodRoute';
 import hotelRoute from './routes/hotelRoute';
 import spotRoute from './routes/spotRoute';
 import planRoute from './routes/planRoute';
+import userRoute from './routes/userRoute';
 
 function privateRoute(req, res, next) {
   if (!req.user) {
@@ -9,13 +10,6 @@ function privateRoute(req, res, next) {
   } else {
     next()
   }
-}
-
-function sendUserInfo(req, res) {
-  res.json({
-    _id: req.user._id,
-    username: req.user.username,
-  })
 }
 
 function sendManagerInfo(req, res) {
@@ -29,13 +23,7 @@ export default function (app) {
   app.use('/hotel', hotelRoute);
   app.use('/spot', spotRoute);
   app.use('/plan', planRoute);
-  app.get('/user', (req, res) => {
-    if (!req.user) {
-      res.send('null')
-    } else {
-      return sendUserInfo(req, res)
-    }
-  })
+  app.use('/user', userRoute);
 
   app.get('/manager1', (req, res) => {
     if (!req.session.manager) {

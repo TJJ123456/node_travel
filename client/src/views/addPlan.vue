@@ -16,69 +16,78 @@
         </el-form>
         <template v-if="ruleForm.list.length">
           <el-form :model="ruleForm" ref="ruleForm" :rules="rules" class="form food_form">
-            <div v-for="(item, index) in ruleForm.list" :key="index">
+            <div v-for="(plan, index) in ruleForm.list" :key="index">
               <header class="form_header">第{{index+1}}天</header>
               <el-form-item label="选择早餐" required>
-                <el-select v-model="item.breakfast" placeholder="请选择早餐">
+                <el-select v-model="plan.breakfast" placeholder="请选择早餐">
                   <el-option
                     v-for="(food, index) in breakfastList"
                     :key="index"
                     :label="food.name"
-                    :value="food.name"
+                    :value="food._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getFoodPrice(ruleForm.list[index].breakfast)}} 元</label>
               </el-form-item>
               <el-form-item label="选择上午景点" required>
-                <el-select v-model="item.morningspot" placeholder="请选择上午景点">
+                <el-select v-model="plan.morningspot" placeholder="请选择上午景点">
                   <el-option
                     v-for="(spot, index) in spotList"
                     :key="index"
                     :label="spot.name"
-                    :value="spot.name"
+                    :value="spot._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getSpotPrice(plan.morningspot)}} 元</label>
               </el-form-item>
               <el-form-item label="选择午餐" required>
-                <el-select v-model="item.lunch" placeholder="请选择午餐">
+                <el-select v-model="plan.lunch" placeholder="请选择午餐">
                   <el-option
                     v-for="(food, index) in lunchlist"
                     :key="index"
                     :label="food.name"
-                    :value="food.name"
+                    :value="food._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getFoodPrice(plan.lunch)}} 元</label>
               </el-form-item>
               <el-form-item label="选择下午景点" required>
-                <el-select v-model="item.afternoonspot" placeholder="请选择下午景点">
+                <el-select v-model="plan.afternoonspot" placeholder="请选择下午景点">
                   <el-option
                     v-for="(spot, index) in spotList"
                     :key="index"
                     :label="spot.name"
-                    :value="spot.name"
+                    :value="spot._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getSpotPrice(plan.afternoonspot)}} 元</label>
               </el-form-item>
               <el-form-item label="选择晚餐" required>
-                <el-select v-model="item.dinner" placeholder="请选择晚餐">
+                <el-select v-model="plan.dinner" placeholder="请选择晚餐">
                   <el-option
                     v-for="(food, index) in dinnerlist"
                     :key="index"
                     :label="food.name"
-                    :value="food.name"
+                    :value="food._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getFoodPrice(plan.dinner)}} 元</label>
               </el-form-item>
               <el-form-item label="选择当天酒店" required>
-                <el-select v-model="item.hotel" placeholder="请选择当天酒店">
+                <el-select v-model="plan.hotel" placeholder="请选择当天酒店">
                   <el-option
                     v-for="(item, index) in hotelList"
                     :key="index"
                     :label="item.name"
-                    :value="item.name"
+                    :value="item._id"
                   ></el-option>
                 </el-select>
+                <label>价格 {{getHotelPrice(plan.hotel)}} 元</label>
               </el-form-item>
             </div>
+            <el-form-item label="总价格">
+              <label>{{getAllPrice()}}</label>
+            </el-form-item>
             <el-form-item label="旅游计划名称" prop="name">
               <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
             </el-form-item>
@@ -125,41 +134,35 @@ export default {
         price: [
           { required: true, message: "价格不能为空", trigger: "blur" },
           { type: "number", message: "价格必须为数字值" }
-        ],
-        list: [{ validator: validateList, trigger: "blur" }],
-        breakfast: [{ required: true, message: "请选择早餐", trigger: "blur" }],
-        morningspot: [
-          { required: true, message: "请选择早上景点", trigger: "blur" }
-        ],
-        lunch: [{ required: true, message: "请选择午餐", trigger: "blur" }],
-        afternoonspot: [
-          { required: true, message: "请选择下午景点", trigger: "blur" }
-        ],
-        dinner: [{ required: true, message: "请选择晚餐", trigger: "blur" }],
-        hotel: [{ required: true, message: "请选择酒店", trigger: "blur" }]
+        ]
       }
     };
   },
   watch: {
     planType: function(val) {
       this.ruleForm.type = val;
-      const plan = {
-        breakfast: "",
-        morningspot: "",
-        lunch: "",
-        afternoonspot: "",
-        dinner: "",
-        hotel: ""
-      };
+      this.ruleForm.list;
+      function plan() {
+        this.breakfast = "";
+        this.morningspot = "";
+        this.lunch = "";
+        this.afternoonspot = "";
+        this.dinner = "";
+        this.hotel = "";
+      }
       switch (val) {
         case "一天":
-          this.ruleForm.list = [plan];
+          this.ruleForm.list = [new plan()];
           break;
         case "两天":
-          this.ruleForm.list = [plan, plan];
+          this.ruleForm.list = [new plan(), new plan()];
           break;
         case "三天":
-          this.ruleForm.list = [plan, plan, plan];
+          this.ruleForm.list = [
+            Object.create(new plan()),
+            Object.create(new plan()),
+            Object.create(new plan())
+          ];
           break;
       }
     }
@@ -167,20 +170,11 @@ export default {
   created() {
     this.initData();
   },
+  activated() {
+    this.initData();
+  },
   computed: {},
   methods: {
-    async initData() {
-      this.loading = true;
-      let food = await this.$fetch("food/foodlist");
-      let hotel = await this.$fetch("hotel/hotellist");
-      let spot = await this.$fetch("spot/list");
-      this.dinnerlist = food.data.filter(item => item.type === "晚餐");
-      this.breakfastList = food.data.filter(item => item.type === "早餐");
-      this.lunchlist = food.data.filter(item => item.type === "午餐");
-      this.hotelList = hotel.data;
-      this.spotList = spot.data;
-      this.loading = false;
-    },
     validateForm() {
       let flag = true;
       this.ruleForm.list.forEach(item => {
@@ -193,10 +187,22 @@ export default {
       });
       return flag;
     },
+    async initData() {
+      this.loading = true;
+      let food = await this.$fetch("food/foodlist");
+      let hotel = await this.$fetch("hotel/hotellist");
+      let spot = await this.$fetch("spot/list");
+      this.foodlist = food.data;
+      this.dinnerlist = food.data.filter(item => item.type === "晚餐");
+      this.breakfastList = food.data.filter(item => item.type === "早餐");
+      this.lunchlist = food.data.filter(item => item.type === "午餐");
+      this.hotelList = hotel.data;
+      this.spotList = spot.data;
+      this.loading = false;
+    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // alert("submit!");
           if (!this.validateForm()) {
             this.$message({
               showClose: true,
@@ -235,6 +241,61 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    getHotelPrice(hotelId) {
+      if (!hotelId) {
+        return "";
+      }
+      const hotel = this.hotelList.find(item => {
+        return item._id === hotelId;
+      });
+      return hotel.price;
+    },
+    getFoodPrice(foodId) {
+      if (!foodId) {
+        return "";
+      }
+      const food = this.foodlist.find(item => {
+        return item._id === foodId;
+      });
+      return food.price;
+    },
+    getSpotPrice(spotId) {
+      if (!spotId) {
+        return "";
+      }
+      const spot = this.spotList.find(item => {
+        return item._id === spotId;
+      });
+      return spot.price;
+    },
+    getAllPrice() {
+      let price = 0;
+      this.ruleForm.list.forEach(item => {
+        for (let val in item) {
+          if (item[val] === "") {
+            continue;
+          }
+          switch (val) {
+            case "breakfast":
+            case "lunch":
+            case "dinner":
+              price += this.getFoodPrice(item[val]);
+              break;
+            case "morningspot":
+            case "afternoonspot":
+              price += this.getSpotPrice(item[val]);
+              break;
+            case "hotel":
+              price += this.getHotelPrice(item[val]);
+              break;
+            default:
+              break;
+          }
+        }
+      });
+      this.ruleForm.price = price;
+      return price;
     }
   }
 };

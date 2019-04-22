@@ -25,9 +25,16 @@ if (managerdata) {
   state.manager = JSON.parse(managerdata).manager;
 }
 
+let userdata = localStorage.getItem('user')
+if (userdata) {
+  state.user = JSON.parse(userdata);
+}
+console.log(state.user);
+
 async function main() {
   try {
-    state.user = await $fetch('user');
+    if (!state.user)
+      state.user = await $fetch('user');
     if (!state.manager)
       state.manager = await $fetch('manager1');
   } catch (e) {

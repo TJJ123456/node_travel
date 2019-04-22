@@ -20,13 +20,42 @@ import userList from './views/userList.vue';
 import manage from './views/manage.vue';
 import home from './views/home.vue';
 
+import userhome from './userviews/userhome.vue';
+import userLayout from './userviews/userLayout.vue';
+import userPlanList from './userviews/userPlanList.vue';
+import userLogin from './userviews/login.vue';
+import myOrder from './userviews/myOrder.vue';
 
 const routes = [
-    { path: '/', name: 'managerlogin', component: mangerLogin },
     {
-        path: '/manager', 
-        name: '', 
-        component: manage, 
+        path: '/', name: 'userhome', component: userLayout,
+        children: [{
+            path: '/',
+            component: userhome,
+            meta: [],
+        },
+        {
+            path: '/home/userPlanList',
+            component: userPlanList,
+            meta: [],
+        },
+        {
+            path: '/home/login',
+            component: userLogin,
+            meta: [],
+        },
+        {
+            path: '/home/myOrder',
+            component: myOrder,
+            meta: [],
+        },
+        ]
+    },
+    { path: '/managerlogin', name: 'managerlogin', component: mangerLogin },
+    {
+        path: '/manager',
+        name: '',
+        component: manage,
         meta: { manager: true },
         children: [{
             path: '',
@@ -56,19 +85,19 @@ const routes = [
             path: '/userList',
             component: userList,
             meta: ['数据管理', '用户列表'],
-        },{
+        }, {
             path: '/foodList',
             component: foodList,
             meta: ['数据管理', '美食列表'],
-        },{
+        }, {
             path: '/hotelList',
             component: hotelList,
             meta: ['数据管理', '酒店列表'],
-        },{
+        }, {
             path: '/spotList',
             component: spotList,
             meta: ['数据管理', '景点列表'],
-        },{
+        }, {
             path: '/planList',
             component: planList,
             meta: ['数据管理', '方案列表'],
