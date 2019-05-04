@@ -25,6 +25,8 @@ import userLayout from './userviews/userLayout.vue';
 import userPlanList from './userviews/userPlanList.vue';
 import userLogin from './userviews/login.vue';
 import myOrder from './userviews/myOrder.vue';
+import planDetail from './userviews/planDetail.vue';
+import uplanList from './userviews/planList.vue';
 
 const routes = [
     {
@@ -38,6 +40,18 @@ const routes = [
             path: '/home/userPlanList',
             component: userPlanList,
             meta: [],
+            children: [{
+                path: '/',
+                name: '',
+                component: uplanList,
+            },
+            {
+                path: 'planDetail/:id',
+                name: 'planDetail',
+                component: planDetail,
+                props: true,
+                meta: ['计划细节']
+            }]
         },
         {
             path: '/home/login',

@@ -15,3 +15,7 @@ export default {
   components: { userhead, navMenu }
 };
 </script>
+<style lang="less" scoped>
+
+</style>
+

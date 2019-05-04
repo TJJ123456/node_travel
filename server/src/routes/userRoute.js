@@ -91,4 +91,29 @@ route.get('/logout', async (req, res, next) => {
     res.send('null');
 })
 
+route.get('/count', async (req, res, next) => {
+    try {
+        let data = await Users.count({});
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+
+})
+
+route.post('/list', async (req, res, next) => {
+    const limit = req.body.limit;
+    const offset = req.body.offset;
+    try {
+        let data = await Users.find({}, { limit: limit, skip: offset });
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
 export default route;

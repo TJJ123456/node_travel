@@ -49,7 +49,6 @@ export default {
   watch: {},
   methods: {
     async initData() {
-      // this.getList();
       this.GetListCount();
     },
     async GetListCount() {

@@ -4,12 +4,13 @@ import express from 'express'
 import session from 'express-session'
 import cors from 'cors'
 import uuid from 'uuid/v4'
+import path from 'path'
 
 import routes from './routes'
 
 const PORT = process.env.PORT || 3000
 const SECRET = process.env.SECRET || 'TR7_9cDZ5Re-@lT3Z1|58F'
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:8080'
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:9999'
 
 const corsOptions = {
   origin: CLIENT_ORIGIN,
@@ -35,7 +36,7 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production',
   },
 }))
-
+app.use('/public', express.static(path.join(__dirname, 'public')));
 routes(app)
 
 app.listen(PORT, () => {
