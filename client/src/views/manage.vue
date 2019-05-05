@@ -8,22 +8,12 @@
           </el-menu-item>
           <el-submenu index="2">
             <template slot="title">
-              <i class="el-icon-document"></i>数据管理
+              <i class="el-icon-document"></i>美食管理
             </template>
-            <el-menu-item index="userList">用户列表</el-menu-item>
             <el-menu-item index="foodList">美食列表</el-menu-item>
-            <el-menu-item index="hotelList">酒店列表</el-menu-item>
-            <el-menu-item index="spotList">景点列表</el-menu-item>
-            <el-menu-item index="planList">方案列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-plus"></i>添加数据
-            </template>
+            <el-menu-item index="foodTypeList">美食分类列表</el-menu-item>
             <el-menu-item index="addFood">添加美食</el-menu-item>
-            <el-menu-item index="addHotel">添加酒店</el-menu-item>
-            <el-menu-item index="addSpot">添加景点</el-menu-item>
-            <el-menu-item index="addPlan">添加方案</el-menu-item>
+            <el-menu-item index="addFoodType">添加美食分类</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>
@@ -39,9 +29,7 @@
 <script>
 export default {
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
     defaultActive: function() {

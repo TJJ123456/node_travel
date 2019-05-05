@@ -3,6 +3,7 @@ import hotelRoute from './routes/hotelRoute';
 import spotRoute from './routes/spotRoute';
 import planRoute from './routes/planRoute';
 import userRoute from './routes/userRoute';
+import commentRoute from './routes/commentsRoute';
 
 function privateRoute(req, res, next) {
   if (!req.user) {
@@ -24,6 +25,7 @@ export default function (app) {
   app.use('/spot', spotRoute);
   app.use('/plan', planRoute);
   app.use('/user', userRoute);
+  app.use('/comment', commentRoute);
 
   app.get('/manager1', (req, res) => {
     if (!req.session.manager) {

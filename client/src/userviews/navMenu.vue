@@ -21,8 +21,21 @@
   <div>
     <div class="top-nav">
       <div class="top-nav-container clearfix">
+        <template v-if="$state.user">
+          <div class="group quick-menu">
+            <a class="item" @click="logout()">登出</a>
+          </div>
+          <div class="group quick-menu">
+            <a class="item">{{$state.user.username}}</a>
+            <span class="seprate">|</span>
+          </div>
+        </template>
+        <div v-else class="group quick-menu">
+          <a class="item" @click="login()">未登录</a>
+        </div>
         <div class="group quick-menu">
-          <a class="item">未登录</a>
+          <a class="item" @click="toIndex()">首页</a>
+          <span class="seprate">|</span>
         </div>
       </div>
     </div>
@@ -63,6 +76,12 @@ export default {
         message: "退出成功",
         type: "success"
       });
+    },
+    login() {
+      this.$router.replace("/home/login");
+    },
+    toIndex() {
+      this.$router.replace("/");
     }
   }
 };
@@ -216,5 +235,11 @@ export default {
 }
 .logo-input a {
   text-decoration: none;
+}
+
+.top-nav .top-nav-container .group .seprate {
+  float: left;
+  line-height: 35px;
+  color: #c7c7c7;
 }
 </style>

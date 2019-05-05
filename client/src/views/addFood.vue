@@ -16,15 +16,21 @@
           <el-form-item label="描述" prop="desc">
             <el-input v-model="ruleForm.desc"></el-input>
           </el-form-item>
+          <el-form-item label="地址" prop="address">
+            <el-input v-model="ruleForm.address"></el-input>
+          </el-form-item>
           <el-form-item label="食品分类" prop="type">
             <el-select v-model="ruleForm.type" placeholder="请选择食品分类">
-              <el-option label="早餐" value="早餐"></el-option>
-              <el-option label="午餐" value="午餐"></el-option>
-              <el-option label="晚餐" value="晚餐"></el-option>
+              <el-option
+                v-for="(item, index) in typelist"
+                :key="index"
+                :value="item._id"
+                :label="item.name"
+              >{{item.name}}</el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="价格" prop="price">
-            <el-input v-model.number="ruleForm.price"></el-input>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model.number="ruleForm.phone"></el-input>
           </el-form-item>
           <el-form-item>
             <el-row type="flex" justify="center">
@@ -40,24 +46,37 @@
 export default {
   data() {
     return {
+      typelist: [],
       ruleForm: {
         name: "",
         desc: "",
-        price: "",
-        type: ""
+        address: "",
+        type: "",
+        phone: ""
       },
       rules: {
         name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
         desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
         type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
-        price: [
-          { required: true, message: "价格不能为空", trigger: "blur" },
-          { type: "number", message: "价格必须为数字值" }
+        address: [{ required: true, message: "地址不能为空", trigger: "blur" }],
+        phone: [
+          { required: true, message: "电话不能为空", trigger: "blur" },
+          { type: "number", message: "电话必须为数字值" }
         ]
       }
     };
   },
+  created() {
+    this.initData();
+  },
+  activated() {
+    this.initData();
+  },
   methods: {
+    async initData() {
+      let data = await this.$fetch("food/foodtypelist");
+      this.typelist = data.data;
+    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -86,7 +105,7 @@ export default {
           message: "创建美食成功",
           type: "success"
         });
-        this.resetForm('ruleForm');
+        this.resetForm("ruleForm");
         this.$router.push({ path: "/foodList" });
       }
     },

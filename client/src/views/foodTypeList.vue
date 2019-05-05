@@ -4,10 +4,6 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="desc" label="描述"></el-table-column>
-        <el-table-column prop="typename" label="类型"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
-        <el-table-column prop="phone" label="电话"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -24,29 +20,10 @@
           :total="count"
         ></el-pagination>
       </div>
-      <el-dialog title="修改美食信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="修改美食分类信息" :visible.sync="dialogFormVisible">
         <el-form :rules="dialogFormrules" :model="dialogForm" ref="dialogForm">
           <el-form-item label="名称" prop="name">
             <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="desc">
-            <el-input v-model="dialogForm.desc"></el-input>
-          </el-form-item>
-          <el-form-item label="地址" prop="address">
-            <el-input v-model="dialogForm.address"></el-input>
-          </el-form-item>
-          <el-form-item label="食品分类" prop="type">
-            <el-select v-model="dialogForm.type" placeholder="请选择食品分类">
-              <el-option
-                v-for="(item, index) in typelist"
-                :key="index"
-                :value="item._id"
-                :label="item.name"
-              >{{item.name}}</el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="电话" prop="phone">
-            <el-input v-model.number="dialogForm.phone"></el-input>
           </el-form-item>
           <el-form-item>
             <el-row type="flex" justify="center">
@@ -62,7 +39,6 @@
 export default {
   data() {
     return {
-      typelist: [],
       editIndex: 0,
       currentPage: 1,
       offset: 0,
@@ -76,10 +52,9 @@ export default {
         name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
         desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
         type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
-        address: [{ required: true, message: "地址不能为空", trigger: "blur" }],
-        phone: [
-          { required: true, message: "电话不能为空", trigger: "blur" },
-          { type: "number", message: "电话必须为数字值" }
+        price: [
+          { required: true, message: "价格不能为空", trigger: "blur" },
+          { type: "number", message: "价格必须为数字值" }
         ]
       }
     };
@@ -93,23 +68,18 @@ export default {
   watch: {},
   methods: {
     async initData() {
-      let data = await this.$fetch("food/foodtypelist");
-      this.typelist = data.data;
       // this.getList();
       this.GetListCount();
     },
-    getTypeName(id) {
-      return this.typelist.find(item => item._id === id).name;
-    },
     async GetListCount() {
-      let data = await this.$fetch("food/foodcount");
+      let data = await this.$fetch("food/foodtypecount");
       if (data.data !== this.count) {
         this.getList();
         this.count = data.data;
       }
     },
     async getList() {
-      let data = await this.$fetch("food/foodlist", {
+      let data = await this.$fetch("food/foodtypelist", {
         method: "POST",
         body: JSON.stringify({
           limit: this.limit,
@@ -124,7 +94,7 @@ export default {
       this.dialogForm = JSON.parse(JSON.stringify(this.tableData[index]));
     },
     async handleDelete(index, row) {
-      let data = await this.$fetch("food/delete", {
+      let data = await this.$fetch("food/deletetype", {
         method: "POST",
         body: JSON.stringify({
           id: this.tableData[index]._id
@@ -139,7 +109,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "删除美食成功",
+          message: "删除美食分类成功",
           type: "success"
         });
         this.tableData.splice(index, 1);
@@ -156,7 +126,7 @@ export default {
       });
     },
     async changeFood() {
-      let data = await this.$fetch("food/change", {
+      let data = await this.$fetch("food/changetype", {
         method: "POST",
         body: JSON.stringify(this.dialogForm)
       });
@@ -169,7 +139,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "修改美食信息成功",
+          message: "修改美食分类成功",
           type: "success"
         });
         this.tableData[this.editIndex] = JSON.parse(

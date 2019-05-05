@@ -1,126 +1,179 @@
 <template>
-  <div class="cata-detail">
-    <div class="cata-part cata-part-one cata-part-double cata-poi">
-      <div class="cata-index cata-food-index">
-        <div class="cata-title">
-          <div class="title-dec">
-            <i class="el-icon-tickets" style="color:#f63;"></i> 美食
-          </div>
-          <a class="view-more">
-            <span>全部</span>
-            <span class="arrow-right el-icon-arrow-right"></span>
-          </a>
-        </div>
-        <div class="cata-con">
-          <div class="cata-shop-item">
-            <div class="shop-item">
-              <a class="shop-img shop-item-pic">
-                <img
-                  src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                  alt
-                >
-              </a>
-              <div class="shop-info tag-single">
-                <a class="shop-name">
-                  <span class="name-desc">刘三姐腋窝米粉</span>
-                </a>
-                <div class="star-info">
-                  <span class="comment">100条点评</span>
-                </div>
-                <div class="area-info">
-                  <span class="region-name">地址</span>
-                  <span class="maincate-name">本地菜</span>
-                </div>
-                <div class="avg">
-                  <span>￥100/人</span>
-                </div>
-              </div>
+  <div style="background-color: #f6f6f6;height:100%; width: 100%;">
+    <div class="cata-detail">
+      <div class="cata-part cata-part-one cata-part-double cata-poi">
+        <div class="cata-index cata-food-index">
+          <div class="cata-title">
+            <div class="title-dec">
+              <i class="el-icon-tickets" style="color:#f63;"></i> 美食
             </div>
+            <a class="view-more">
+              <span>全部</span>
+              <span class="arrow-right el-icon-arrow-right"></span>
+            </a>
           </div>
-          <div class="cata-shop-item">
-            <div class="shop-item">
-              <a class="shop-img shop-item-pic">
-                <img
-                  src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                  alt
-                >
-              </a>
-              <div class="shop-info tag-single">
-                <a class="shop-name">
-                  <span class="name-desc">刘三姐腋窝米粉</span>
+          <div class="cata-con">
+            <div class="cata-shop-item" v-for="(item, index) in foodlist" :key="index">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="http://localhost:3000/public/img/default.jpg"
+                    @click="toDetail(0, item._id)"
+                  >
                 </a>
-                <div class="star-info">
-                  <span class="comment">100条点评</span>
-                </div>
-                <div class="area-info">
-                  <span class="region-name">地址</span>
-                  <span class="maincate-name">本地菜</span>
-                </div>
-                <div class="avg">
-                  <span>￥100/人</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cata-shop-item">
-            <div class="shop-item">
-              <a class="shop-img shop-item-pic">
-                <img
-                  src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                  alt
-                >
-              </a>
-              <div class="shop-info tag-single">
-                <a class="shop-name">
-                  <span class="name-desc">刘三姐腋窝米粉</span>
-                </a>
-                <div class="star-info">
-                  <span class="comment">100条点评</span>
-                </div>
-                <div class="area-info">
-                  <span class="region-name">地址</span>
-                  <span class="maincate-name">本地菜</span>
-                </div>
-                <div class="avg">
-                  <span>￥100/人</span>
+                <div class="shop-info tag-single">
+                  <a class="shop-name" @click="toDetail(0, item._id)">
+                    <span class="name-desc">{{item.name}}</span>
+                  </a>
+                  <div class="star-info">
+                    <el-rate v-model="value" disabled text-color="#ff9900" score-template="{value}"></el-rate>
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <!-- <span class="region-name">{{item.address}}</span> -->
+                    <span class="maincate-name">{{item.typename}}</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="cata-index cata-entertainment-index">
-        <div class="cata-title">
-          <div class="title-dec">
-            <i class="el-icon-tickets" style="color:#f63;"></i> 休闲娱乐
+        <div class="cata-index cata-entertainment-index">
+          <div class="cata-title">
+            <div class="title-dec">
+              <i class="el-icon-tickets" style="color:#f63;"></i> 休闲娱乐
+            </div>
+            <a class="view-more">
+              <span>全部</span>
+              <span class="arrow-right el-icon-arrow-right"></span>
+            </a>
           </div>
-          <a class="view-more">
-            <span>全部</span>
-            <span class="arrow-right el-icon-arrow-right"></span>
-          </a>
-        </div>
-        <div class="cata-con">
-          <div class="cata-shop-item">
-            <div class="shop-item">
-              <a class="shop-img shop-item-pic">
-                <img
-                  src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                  alt
-                >
-              </a>
-              <div class="shop-info tag-single">
-                <a class="shop-name">
-                  <span class="name-desc">刘三姐腋窝米粉</span>
+          <div class="cata-con">
+            <div class="cata-shop-item">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
+                    alt
+                  >
                 </a>
-                <div class="star-info">
-                  <span class="comment">100条点评</span>
+                <div class="shop-info tag-single">
+                  <a class="shop-name">
+                    <span class="name-desc">刘三姐的家</span>
+                  </a>
+                  <div class="star-info">
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <span class="region-name">地址</span>
+                    <span class="maincate-name">本地菜</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
                 </div>
-                <div class="area-info">
-                  <span class="region-name">地址</span>
-                  <span class="maincate-name">本地菜</span>
+              </div>
+            </div>
+            <div class="cata-shop-item">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
+                    alt
+                  >
+                </a>
+                <div class="shop-info tag-single">
+                  <a class="shop-name">
+                    <span class="name-desc">刘三姐的家</span>
+                  </a>
+                  <div class="star-info">
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <span class="region-name">地址</span>
+                    <span class="maincate-name">本地菜</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
                 </div>
-                <div class="avg">
-                  <span>￥100/人</span>
+              </div>
+            </div>
+            <div class="cata-shop-item">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
+                    alt
+                  >
+                </a>
+                <div class="shop-info tag-single">
+                  <a class="shop-name">
+                    <span class="name-desc">刘三姐的家</span>
+                  </a>
+                  <div class="star-info">
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <span class="region-name">地址</span>
+                    <span class="maincate-name">本地菜</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cata-shop-item">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
+                    alt
+                  >
+                </a>
+                <div class="shop-info tag-single">
+                  <a class="shop-name">
+                    <span class="name-desc">刘三姐的家</span>
+                  </a>
+                  <div class="star-info">
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <span class="region-name">地址</span>
+                    <span class="maincate-name">本地菜</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cata-shop-item">
+              <div class="shop-item">
+                <a class="shop-img shop-item-pic">
+                  <img
+                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
+                    alt
+                  >
+                </a>
+                <div class="shop-info tag-single">
+                  <a class="shop-name">
+                    <span class="name-desc">刘三姐的家</span>
+                  </a>
+                  <div class="star-info">
+                    <span class="comment">100条点评</span>
+                  </div>
+                  <div class="area-info">
+                    <span class="region-name">地址</span>
+                    <span class="maincate-name">本地菜</span>
+                  </div>
+                  <div class="avg">
+                    <span>￥100/人</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -132,12 +185,34 @@
 </template>
   
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      foodlist: []
+    };
+  },
+  created() {
+    this.initData();
+  },
+  activated() {
+    this.initData();
+  },
+  methods: {
+    async initData() {
+      let data = await this.$fetch("food/foodlist");
+      this.foodlist = data.data;
+    },
+    toDetail(type, id) {
+      this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
 .cata-detail {
   margin: 10px auto;
   width: 1190px;
+  // background-color: #f6f6f6;
 }
 .cata-detail .cata-part-one {
   display: inline-block;

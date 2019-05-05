@@ -12,11 +12,13 @@ import addFood from './views/addFood.vue';
 import addHotel from './views/addHotel.vue';
 import addPlan from './views/addPlan.vue';
 import addSpot from './views/addSpot.vue';
+import addFoodType from './views/addFoodType.vue';
 import foodList from './views/foodList.vue';
 import hotelList from './views/hotelList.vue';
 import planList from './views/planList.vue';
 import spotList from './views/spotList.vue';
 import userList from './views/userList.vue';
+import foodTypeList from './views/foodTypeList.vue';
 import manage from './views/manage.vue';
 import home from './views/home.vue';
 
@@ -27,6 +29,8 @@ import userLogin from './userviews/login.vue';
 import myOrder from './userviews/myOrder.vue';
 import planDetail from './userviews/planDetail.vue';
 import uplanList from './userviews/planList.vue';
+import itemDetail from './userviews/itemDetail.vue';
+import comment from './userviews/comment.vue';
 
 const routes = [
     {
@@ -51,7 +55,8 @@ const routes = [
                 component: planDetail,
                 props: true,
                 meta: ['计划细节']
-            }]
+            },
+            ]
         },
         {
             path: '/home/login',
@@ -63,6 +68,18 @@ const routes = [
             component: myOrder,
             meta: [],
         },
+        {
+            path: 'Detail/:type/:id',
+            name: 'itemDetail',
+            component: itemDetail,
+            props: true,
+        },
+        {
+            path: 'Detail/:type/:id/comment',
+            name: 'comment',
+            component: comment,
+            props: true,
+        }
         ]
     },
     { path: '/managerlogin', name: 'managerlogin', component: mangerLogin },
@@ -79,6 +96,10 @@ const routes = [
             path: '/addFood',
             component: addFood,
             meta: ['添加数据', '添加美食'],
+        }, {
+            path: '/addFoodType',
+            component: addFoodType,
+            meta: ['添加数据', '添加美食分类'],
         }, {
             path: '/addHotel',
             component: addHotel,
@@ -103,6 +124,10 @@ const routes = [
             path: '/foodList',
             component: foodList,
             meta: ['数据管理', '美食列表'],
+        }, {
+            path: '/foodtypeList',
+            component: foodTypeList,
+            meta: ['数据管理', '美食分类列表'],
         }, {
             path: '/hotelList',
             component: hotelList,
