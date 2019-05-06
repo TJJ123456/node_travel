@@ -65,7 +65,7 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped>
+<style lang="less" scoped>
 .container {
   position: absolute;
   top: 0px;

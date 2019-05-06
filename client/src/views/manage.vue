@@ -15,6 +15,13 @@
             <el-menu-item index="addFood">添加美食</el-menu-item>
             <el-menu-item index="addFoodType">添加美食分类</el-menu-item>
           </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-document"></i>评论管理
+            </template>
+            <el-menu-item index="checkList">审核列表</el-menu-item>
+            <el-menu-item index="commentList">评论列表</el-menu-item>
+          </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="20" style="height: 100%;overflow: auto;">

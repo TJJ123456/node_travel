@@ -21,6 +21,8 @@ import userList from './views/userList.vue';
 import foodTypeList from './views/foodTypeList.vue';
 import manage from './views/manage.vue';
 import home from './views/home.vue';
+import checkList from './views/checkList.vue';
+import commentList from './views/commentList.vue';
 
 import userhome from './userviews/userhome.vue';
 import userLayout from './userviews/userLayout.vue';
@@ -31,6 +33,7 @@ import planDetail from './userviews/planDetail.vue';
 import uplanList from './userviews/planList.vue';
 import itemDetail from './userviews/itemDetail.vue';
 import comment from './userviews/comment.vue';
+import shopList from './userviews/shopList.vue';
 
 const routes = [
     {
@@ -78,6 +81,12 @@ const routes = [
             path: 'Detail/:type/:id/comment',
             name: 'comment',
             component: comment,
+            props: true,
+        },
+        {
+            path: '/:type/shoplist',
+            name: 'shoplist',
+            component: shopList,
             props: true,
         }
         ]
@@ -140,7 +149,19 @@ const routes = [
             path: '/planList',
             component: planList,
             meta: ['数据管理', '方案列表'],
-        }]
+        },
+        {
+            path: '/commentList',
+            component: commentList,
+            meta: ['评论管理', '评论列表'],
+        },
+        {
+            path: '/checkList',
+            component: checkList,
+            meta: ['评论管理', '审核列表'],
+        },
+
+        ]
     },
 
 ]

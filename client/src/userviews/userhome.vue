@@ -7,7 +7,7 @@
             <div class="title-dec">
               <i class="el-icon-tickets" style="color:#f63;"></i> 美食
             </div>
-            <a class="view-more">
+            <a class="view-more" @click="toShoplist(0)">
               <span>全部</span>
               <span class="arrow-right el-icon-arrow-right"></span>
             </a>
@@ -26,8 +26,8 @@
                     <span class="name-desc">{{item.name}}</span>
                   </a>
                   <div class="star-info">
-                    <el-rate v-model="value" disabled text-color="#ff9900" score-template="{value}"></el-rate>
-                    <span class="comment">100条点评</span>
+                    <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
+                    <span class="comment">{{getCommentNum(item._id)}}条点评</span>
                   </div>
                   <div class="area-info">
                     <!-- <span class="region-name">{{item.address}}</span> -->
@@ -188,7 +188,8 @@
 export default {
   data() {
     return {
-      foodlist: []
+      foodlist: [],
+      commentList: []
     };
   },
   created() {
@@ -200,10 +201,32 @@ export default {
   methods: {
     async initData() {
       let data = await this.$fetch("food/foodlist");
+      let comment = await this.$fetch("comment/passlist");
       this.foodlist = data.data;
+      this.commentList = comment.data;
+      this.foodlist.forEach(item => {
+        item.score = parseFloat(this.getScore(item._id)) || 0;
+      });
     },
     toDetail(type, id) {
       this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
+    },
+    getScore(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.score;
+      });
+      return (sum / itemArr.length).toFixed(1);
+    },
+    getCommentNum(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      return itemArr.length;
+      // return 0;
+    },
+    toShoplist(type) {
+      console.log("去shoplist", type);
+      this.$router.push({ name: "shoplist", params: { type: type } });
     }
   }
 };

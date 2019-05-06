@@ -15,7 +15,7 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped>
+<style lang="less" scoped>
 a {
   line-height: 60px;
   color: white;

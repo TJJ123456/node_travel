@@ -80,7 +80,6 @@ route.post('/foodlist', async (req, res, next) => {
     try {
         let data = await Foods.find({}, { limit: limit, skip: offset });
         for (let i in data) {
-            console.log(data[i])
             data[i].typename = (await FoodTypes.findOne({ _id: data[i].type })).name;
         }
         res.json({

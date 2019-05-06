@@ -5,6 +5,7 @@
         <div class="basic-info default nug_shop_ab_pv-a">
           <h1 class="shop-name">{{item.name}}</h1>
           <div class="brief-info">
+            <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
             <span class="item">44条评论</span>
             <span class="item">人均100元</span>
           </div>
@@ -52,7 +53,7 @@
                   </div>
                   <div class="misc-info">
                     <div class="actions"></div>
-                    <span class="time">2013-1-1</span>
+                    <span class="time">{{item.time}}</span>
                   </div>
                 </div>
               </li>
@@ -65,6 +66,8 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+moment.locale("zh-cn");
 export default {
   data() {
     return {
@@ -80,6 +83,9 @@ export default {
       });
       return Math.floor(sum / this.commentList.length);
     }
+  },
+  activated() {
+    this.initData();
   },
   created() {
     this.initData();
@@ -110,8 +116,24 @@ export default {
         })
       });
       this.commentList = list.data;
+      this.commentList.forEach(item => {
+        item.time = this.formatTime(item.createTime);
+      });
+      this.item.score = parseFloat(this.getScore(this.id)) || 0;
+
       // this.getList();
       // this.GetListCount();
+    },
+    getScore(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.score;
+      });
+      return (sum / itemArr.length).toFixed(1);
+    },
+    formatTime(time) {
+      return moment(time).format("LL");
     },
     toComment() {
       this.$router.push({

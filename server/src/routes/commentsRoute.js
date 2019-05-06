@@ -1,4 +1,4 @@
-import { Comments, Users } from '../providers'
+import { Comments, Users, Foods } from '../providers'
 import express from 'express'
 const route = express.Router();
 
@@ -22,6 +22,7 @@ route.post('/create', async (req, res, next) => {
         if (!req.session.user) {
             throw new Error('请登录');
         }
+        const time = new Date();
         const data = {
             score: req.body.score,
             average: req.body.average,
@@ -29,7 +30,8 @@ route.post('/create', async (req, res, next) => {
             type: req.body.type,
             itemid: req.body.itemid,
             userid: req.session.user._id,
-            commentType: commentType.Wait
+            commentType: commentType.Wait,
+            createTime: time.getTime(),
         }
         const newDoc = await Comments.insert(data);
         res.json({ status: 'ok' })
@@ -54,6 +56,33 @@ route.get('/count', async (req, res, next) => {
 route.get('/list', async (req, res, next) => {
     try {
         let data = await Comments.find({});
+        for (let i in data) {
+            data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
+            switch (data[i].type) {
+                case Comment.Food:
+                    data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
+                    break
+            }
+        }
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
+route.get('/passlist', async (req, res, next) => {
+    try {
+        let data = await Comments.find({ commentType: commentType.Pass });
+        for (let i in data) {
+            data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
+            switch (data[i].type) {
+                case Comment.Food:
+                    data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
+                    break
+            }
+        }
         res.json({
             data: data
         });
@@ -66,10 +95,28 @@ route.post('/itemlist', async (req, res, next) => {
     const type = req.body.type;
     const id = req.body.id;
     try {
-        let data = await Comments.find({}, { type: type, itemid: id, commentType: commentType.Wait });
+        let data = await Comments.find({ type: type, itemid: id, commentType: commentType.Pass });
         for (let i in data) {
-            console.log(data[i]);
             data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
+        }
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
+route.get('/checklist', async (req, res, next) => {
+    try {
+        let data = await Comments.find({ commentType: commentType.Wait });
+        for (let i in data) {
+            data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
+            switch (data[i].type) {
+                case Comment.Food:
+                    data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
+                    break
+            }
         }
         res.json({
             data: data
@@ -93,6 +140,27 @@ route.post('/change', async (req, res, next) => {
     const id = req.body._id;
     try {
         let data = await Comments.updateOne({ _id: id }, req.body);
+        res.json({ status: 'ok' })
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
+route.post('/pass', async (req, res, next) => {
+    const id = req.body.id;
+    try {
+        console.log('审核一次');
+        let data = await Comments.updateOne({ _id: id }, { $set: { 'commentType': commentType.Pass } });
+        res.json({ status: 'ok' })
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
+route.post('/nopass', async (req, res, next) => {
+    const id = req.body._id;
+    try {
+        let data = await Comments.updateOne({ _id: id }, { $set: { 'commentType': commentType.NoPass } });
         res.json({ status: 'ok' })
     } catch (e) {
         res.status(405).send(e.message);
