@@ -28,7 +28,7 @@ import userhome from './userviews/userhome.vue';
 import userLayout from './userviews/userLayout.vue';
 import userPlanList from './userviews/userPlanList.vue';
 import userLogin from './userviews/login.vue';
-import myOrder from './userviews/myOrder.vue';
+import myview from './userviews/myview.vue';
 import planDetail from './userviews/planDetail.vue';
 import uplanList from './userviews/planList.vue';
 import itemDetail from './userviews/itemDetail.vue';
@@ -67,8 +67,8 @@ const routes = [
             meta: [],
         },
         {
-            path: '/home/myOrder',
-            component: myOrder,
+            path: '/home/myview',
+            component: myview,
             meta: [],
         },
         {

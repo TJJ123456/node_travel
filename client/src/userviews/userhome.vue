@@ -34,7 +34,7 @@
                     <span class="maincate-name">{{item.typename}}</span>
                   </div>
                   <div class="avg">
-                    <span>￥100/人</span>
+                    <span>￥{{item.avg}}/人</span>
                   </div>
                 </div>
               </div>
@@ -206,10 +206,19 @@ export default {
       this.commentList = comment.data;
       this.foodlist.forEach(item => {
         item.score = parseFloat(this.getScore(item._id)) || 0;
+        item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
     },
     toDetail(type, id) {
       this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
+    },
+    getaverage(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.average;
+      });
+      return (sum / itemArr.length).toFixed(1);
     },
     getScore(itemid) {
       let itemArr = this.commentList.filter(item => item.itemid === itemid);
@@ -222,7 +231,6 @@ export default {
     getCommentNum(itemid) {
       let itemArr = this.commentList.filter(item => item.itemid === itemid);
       return itemArr.length;
-      // return 0;
     },
     toShoplist(type) {
       console.log("去shoplist", type);

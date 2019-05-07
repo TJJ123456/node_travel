@@ -1,23 +1,4 @@
 <template>
-  <!-- <el-row class="nav">
-    <el-col :span="6" :offset="6">
-      <el-menu :default-active="defaultActive" mode="horizontal" router>
-        <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item index="/home/userPlanList">计划列表</el-menu-item>
-      </el-menu>
-    </el-col>
-    <el-col :span="4" :offset="8">
-      <template v-if="$state.user">
-        <el-menu :default-active="defaultActive" mode="horizontal" router>
-          <el-menu-item index="/home/myOrder">我的订单</el-menu-item>
-          <el-menu-item @click="logout()">登出</el-menu-item>
-        </el-menu>
-      </template>
-      <el-menu v-else :default-active="defaultActive" mode="horizontal" router>
-        <el-menu-item index="/home/login">登录</el-menu-item>
-      </el-menu>
-    </el-col>
-  </el-row>-->
   <div>
     <div class="top-nav">
       <div class="top-nav-container clearfix">
@@ -26,7 +7,7 @@
             <a class="item" @click="logout()">登出</a>
           </div>
           <div class="group quick-menu">
-            <a class="item">{{$state.user.username}}</a>
+            <a class="item" @click="toMyview()">{{$state.user.username}}</a>
             <span class="seprate">|</span>
           </div>
         </template>
@@ -39,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="logo-input">
+    <div class="logo-input" v-if="checkRoute()">
       <div class="logo-input-container clearfix">
         <div class="search-box">
           <div class="search-bar">
@@ -82,6 +63,16 @@ export default {
     },
     toIndex() {
       this.$router.replace("/");
+    },
+    toMyview() {
+      this.$router.push({ path: "/home/myview" });
+    },
+    checkRoute() {
+      console.log(
+        "/home/myview" !== this.$route.path,
+        this.$route.params.path
+      );
+      return "/home/myview" !== this.$route.path;
     }
   }
 };

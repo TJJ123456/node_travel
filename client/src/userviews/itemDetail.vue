@@ -387,6 +387,7 @@ h2 {
   font-size: 14px;
   line-height: 24px;
   margin-top: 10px;
+  position: static;
   word-break: break-all;
   word-wrap: break-word;
 }

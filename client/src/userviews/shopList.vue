@@ -3,14 +3,19 @@
     <div class="navigation">
       <div class="nav-category J_filter_category">
         <h4>分类:</h4>
-        <a class="def cur">
+        <a class="def" :class="{cur: selectTypeIndex === -1}" @click="changeSelectType(-1)">
           <span>不限</span>
         </a>
         <div class="nc-contain" style="height:50px;">
           <div class="con">
             <div id="classfy" class="nc-items nc-more">
-              <a>
-                <span>小吃快餐</span>
+              <a
+                v-for="(item, index) in typelist"
+                :key="index"
+                :class="{cur: selectTypeIndex === index}"
+                @click="changeSelectType(index)"
+              >
+                <span>{{item.name}}</span>
               </a>
             </div>
           </div>
@@ -19,9 +24,60 @@
     </div>
     <div class="content-wrap">
       <div class="shop-wrap">
-        <div class="content">
-          <div class="filter-box J_filter_box"></div>
-          <div class="shop-list J_shop-list shop-all-list" id="shop-all-list"></div>
+        <div class="content" style="overflow:hidden">
+          <div class="filter-box J_filter_box" style="overflow:hidden">
+            <div class="filt-service">
+              <ul>
+                <li>
+                  <a :class="{cur: sortType === 0}" @click="setSortType(0)">智能</a>
+                  <em class="sep">|</em>
+                </li>
+                <li>
+                  <a :class="{cur: sortType === 1}" @click="setSortType(1)">好评</a>
+                  <em class="sep">|</em>
+                </li>
+                <li>
+                  <a :class="{cur: sortType === 2}" @click="setSortType(2)">评论最多</a>
+                  <em class="sep">|</em>
+                </li>
+                <li>
+                  <a :class="{cur: sortType === 3}" @click="setSortType(3)">人均最少</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="shop-list J_shop-list shop-all-list" id="shop-all-list">
+            <ul style="overflow:hidden">
+              <li v-for="(item, index) in showList" :key="index">
+                <div class="pic">
+                  <a @click="toDetail(0, item._id)">
+                    <img src="http://localhost:3000/public/img/default.jpg" alt>
+                  </a>
+                </div>
+                <div class="txt">
+                  <div class="tit">
+                    <a @click="toDetail(0, item._id)">
+                      <h4>{{item.name}}</h4>
+                    </a>
+                  </div>
+                  <div class="comment">
+                    <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
+                    <a>{{getCommentNum(item._id)}}条点评</a>
+                    <em class="sep">|</em>
+                    <a>人均￥{{item.avg}}</a>
+                  </div>
+                  <div class="tag-addr">
+                    <a>{{item.typename}}</a>
+                    <em class="sep">|</em>
+                    <a>{{item.address}}</a>
+                  </div>
+                </div>
+                <div class="svr-info">
+                  <a>{{item.desc}}</a>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="aside"></div>
@@ -31,9 +87,17 @@
 <script>
 import moment from "moment";
 moment.locale("zh-cn");
+const sortType = {};
+sortType.default = 0; //默认
+sortType.score = 1; //好评
+sortType.comment = 2; //评论
+sortType.avarage = 3; //人均
 export default {
   data() {
     return {
+      selectTypeIndex: -1,
+      sortType: 0,
+      value: 5,
       shoplist: {},
       typelist: {},
       commentList: []
@@ -46,6 +110,35 @@ export default {
         sum += item.average;
       });
       return Math.floor(sum / this.commentList.length);
+    },
+    showList() {
+      let showlist = Array.from(this.shoplist);
+      if (this.selectTypeIndex === -1) {
+      } else {
+        let typeid = this.typelist[this.selectTypeIndex]._id;
+        showlist = this.shoplist.filter(item => item.type === typeid);
+      }
+      switch (this.sortType) {
+        case sortType.default:
+          return showlist;
+          break;
+        case sortType.score:
+          return showlist.sort((a, b) => {
+            return b.score - a.score;
+          });
+          break;
+        case sortType.comment:
+          return showlist.sort((a, b) => {
+            return this.getCommentNum(b._id) - this.getCommentNum(a._id);
+          });
+          break;
+        case sortType.avarage:
+          return showlist.sort((a, b) => {
+            return a.avg - b.avg;
+          });
+          break;
+      }
+      return showlist;
     }
   },
   activated() {
@@ -68,23 +161,26 @@ export default {
         case 2:
           break;
       }
-      let list = await this.$fetch("comment/itemlist", {
-        method: "POST",
-        body: JSON.stringify({
-          id: this.id,
-          type: parseInt(this.type)
-        })
-      });
+      let list = await this.$fetch("comment/passlist");
       this.commentList = list.data;
       this.commentList.forEach(item => {
         item.time = this.formatTime(item.createTime);
       });
       this.shoplist.forEach(item => {
-        item.shoplist = parseFloat(this.getScore(item._id)) || 0;
+        item.score = parseFloat(this.getScore(item._id)) || 0;
+        item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
 
       // this.getList();
       // this.GetListCount();
+    },
+    getaverage(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.average;
+      });
+      return (sum / itemArr.length).toFixed(1);
     },
     getScore(itemid) {
       let itemArr = this.commentList.filter(item => item.itemid === itemid);
@@ -94,8 +190,21 @@ export default {
       });
       return (sum / itemArr.length).toFixed(1);
     },
+    getCommentNum(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      return itemArr.length;
+    },
     formatTime(time) {
       return moment(time).format("LL");
+    },
+    changeSelectType(index) {
+      this.selectTypeIndex = index;
+    },
+    setSortType(index) {
+      this.sortType = index;
+    },
+    toDetail(type, id) {
+      this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
     }
   },
   props: {
@@ -113,6 +222,7 @@ export default {
   color: #999;
 }
 .navigation {
+  margin-top: 10px;
   border: 1px solid #f0f0f0;
   padding: 18px 0 0 19px;
   background: #fff;
@@ -228,5 +338,177 @@ a {
 
 div {
   display: block;
+}
+
+.content-wrap {
+  margin-top: 10px;
+}
+
+.content-wrap .shop-wrap {
+  width: 950px;
+  float: left;
+  margin-right: 10px;
+}
+
+.content-wrap .shop-wrap .content {
+  border: 1px solid #f0f0f0;
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-bottom: none;
+}
+
+.filter-box {
+  position: relative;
+  z-index: 10;
+  padding: 0 45px 0 19px;
+  border-bottom: solid 1px #eee;
+  line-height: 44px;
+}
+
+.filter-box .filt-service {
+  float: right;
+  line-height: 44px;
+}
+
+.filter-box .filt-service li {
+  position: relative;
+  float: left;
+  z-index: 1;
+  _width: 64px;
+  text-align: center;
+}
+
+.filter-box .filt-service .cur {
+  color: #f63;
+}
+.filter-box .filt-service a {
+  display: block;
+  padding: 0 15px;
+  _padding-top: 14px;
+  _line-height: 20px;
+  _height: 20px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.filter-box .filt-service em {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  color: #e0e0e0;
+}
+
+i,
+em {
+  font-style: normal;
+}
+
+.content-wrap .shop-wrap .shop-all-list {
+  position: relative;
+  z-index: 9;
+}
+
+.content-wrap .shop-wrap .shop-list {
+  padding-top: 0;
+}
+.content-wrap .shop-wrap .shop-list {
+  margin-bottom: -1px;
+  // padding-top: 10px;
+  position: relative;
+  *z-index: 5;
+}
+
+.content-wrap .shop-wrap .shop-all-list li:hover {
+  background: #f8f8f8;
+}
+.content-wrap .shop-wrap .shop-all-list li {
+  position: relative;
+  float: left;
+  zoom: 1;
+  padding-left: 210px;
+  width: 723px;
+  min-height: 118px;
+}
+.content-wrap .shop-wrap .shop-list li {
+  padding: 15px 15px 38px 210px;
+  border-bottom: 1px solid #f0f0f0;
+  display: block;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .pic {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+.content-wrap .shop-wrap .shop-list li .pic {
+  float: left;
+  margin-right: 14px;
+}
+
+.content-wrap .shop-wrap .shop-list li img {
+  width: 170px;
+  height: 127px;
+  border: 1px solid #f0f0f0;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.content-wrap .shop-wrap .shop-all-list li .txt {
+  position: relative;
+  min-height: 88px;
+  line-height: 26px;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .tit a {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  white-space: nowrap;
+  word-wrap: normal;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  vertical-align: middle;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.content-wrap .shop-wrap .shop-all-list li .tit h4 {
+  float: left;
+  margin-right: 5px;
+  font-size: 16px;
+  max-width: 380px;
+  _width: 295px;
+  color: #333;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .comment a {
+  color: #999;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .tag-addr {
+  line-height: 24px;
+  color: #999;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .tag-addr a {
+  color: #999;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .svr-info {
+  border-top: dashed 1px #f0f0f0;
+  margin-bottom: -22px;
+}
+
+.content-wrap .shop-wrap .shop-all-list li .svr-info a {
+  display: block;
+  padding-top: 4px;
+  width: 85%;
+  line-height: 28px;
+  display: block;
+  color: #999;
 }
 </style>
