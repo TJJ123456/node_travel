@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/manager' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
-    <a @click="logout">退出</a>
+    <a class="logout" @click="logout()">退出</a>
   </div>
 </template>
 <script>
@@ -37,10 +37,20 @@ export default {
   padding-left: 20px;
 }
 </style>
-<style scoped>
+<style lang="less" scoped>
 a {
   line-height: 60px;
   color: white;
   text-decoration: none;
+}
+.logout {
+  line-height: 60px;
+  height: 60px;
+  width: 80px;
+  color: #999;
+  text-decoration: none;
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>

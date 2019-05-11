@@ -17,6 +17,15 @@
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
+              <i class="el-icon-document"></i>娱乐管理
+            </template>
+            <el-menu-item index="entertainmentsList">娱乐列表</el-menu-item>
+            <el-menu-item index="entertainmentTypesList">娱乐分类列表</el-menu-item>
+            <el-menu-item index="addEntertainment">添加娱乐</el-menu-item>
+            <el-menu-item index="addEntertainmentType">添加娱乐分类</el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
               <i class="el-icon-document"></i>评论管理
             </template>
             <el-menu-item index="checkList">审核列表</el-menu-item>

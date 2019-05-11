@@ -23,6 +23,10 @@ import manage from './views/manage.vue';
 import home from './views/home.vue';
 import checkList from './views/checkList.vue';
 import commentList from './views/commentList.vue';
+import entertainmentsList from './views/entertainmentsList.vue';
+import entertainmentTypesList from './views/entertainmentTypesList.vue';
+import addEntertainment from './views/addEntertainment.vue';
+import addEntertainmentType from './views/addEntertainmentType.vue';
 
 import userhome from './userviews/userhome.vue';
 import userLayout from './userviews/userLayout.vue';
@@ -151,16 +155,35 @@ const routes = [
             meta: ['数据管理', '方案列表'],
         },
         {
+            path: '/checkList',
+            component: checkList,
+            meta: ['评论管理', '评论列表'],
+        },
+        {
             path: '/commentList',
             component: commentList,
             meta: ['评论管理', '评论列表'],
         },
         {
-            path: '/checkList',
-            component: checkList,
-            meta: ['评论管理', '审核列表'],
+            path: '/entertainmentsList',
+            component: entertainmentsList,
+            meta: ['数据管理', '娱乐列表'],
         },
-
+        {
+            path: '/entertainmentTypesList',
+            component: entertainmentTypesList,
+            meta: ['数据管理', '娱乐列表'],
+        },
+        {
+            path: '/addEntertainment',
+            component: addEntertainment,
+            meta: ['数据管理', '添加娱乐'],
+        },
+        {
+            path: '/addEntertainmentType',
+            component: addEntertainmentType,
+            meta: ['数据管理', '添加娱乐分类'],
+        },
         ]
     },
 

@@ -2,10 +2,10 @@
   <div style="background-color: #f6f6f6;height:100%; width: 100%;">
     <div class="cata-detail">
       <div class="cata-part cata-part-one cata-part-double cata-poi">
-        <div class="cata-index cata-food-index">
+        <div class="cata-index cata-food-index" style="height:480px;">
           <div class="cata-title">
             <div class="title-dec">
-              <i class="el-icon-tickets" style="color:#f63;"></i> 美食
+              <i class="el-icon-food" style="color:#f63;"></i> 美食
             </div>
             <a class="view-more" @click="toShoplist(0)">
               <span>全部</span>
@@ -41,10 +41,10 @@
             </div>
           </div>
         </div>
-        <div class="cata-index cata-entertainment-index">
+        <div class="cata-index cata-entertainment-index" style="height:480px;">
           <div class="cata-title">
             <div class="title-dec">
-              <i class="el-icon-tickets" style="color:#f63;"></i> 休闲娱乐
+              <i class="el-icon-star-off" style="color:#f63;"></i> 休闲娱乐
             </div>
             <a class="view-more">
               <span>全部</span>

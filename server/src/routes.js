@@ -5,6 +5,7 @@ import planRoute from './routes/planRoute';
 import userRoute from './routes/userRoute';
 import commentRoute from './routes/commentsRoute';
 import postRoute from './routes/postRoute';
+import entertainmentRoute from './routes/entertainmentRoute';
 
 function privateRoute(req, res, next) {
   if (!req.user) {
@@ -28,6 +29,7 @@ export default function (app) {
   app.use('/user', userRoute);
   app.use('/comment', commentRoute);
   app.use('/posts', postRoute);
+  app.use('/entertainment', entertainmentRoute);
 
   app.get('/manager1', (req, res) => {
     if (!req.session.manager) {
@@ -48,5 +50,11 @@ export default function (app) {
         manager: false
       })
     }
+  })
+  app.get('/managerLogout', (req, res, next) => {
+    req.session.manager = null;
+    res.json({
+      status: 'ok'
+    })
   })
 }
