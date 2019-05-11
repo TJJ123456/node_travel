@@ -13,7 +13,7 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="描述" prop="desc">
+          <el-form-item label="描述" prop="desc" type="textarea">
             <el-input v-model="ruleForm.desc"></el-input>
           </el-form-item>
           <el-form-item label="地址" prop="address">
@@ -31,6 +31,24 @@
           </el-form-item>
           <el-form-item label="电话" prop="phone">
             <el-input v-model.number="ruleForm.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="上传美食图片" prop="filepath">
+            <el-upload
+              class="avatar-uploader"
+              ref="upload"
+              action="http://localhost:3000/posts/img"
+              :before-upload="beforeUpload"
+              :on-success="uploadSuccess"
+              :limit="1"
+            >
+              <img
+                v-if="ruleForm.filepath"
+                :src="'http://localhost:3000' + ruleForm.filepath"
+                class="avatar"
+              >
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10m</div>
+            </el-upload>
           </el-form-item>
           <el-form-item>
             <el-row type="flex" justify="center">
@@ -52,6 +70,7 @@ export default {
         desc: "",
         address: "",
         type: "",
+        filepath: "",
         phone: ""
       },
       rules: {
@@ -111,6 +130,30 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    beforeUpload(file) {
+      console.log(file.type);
+      const isJPGorPng =
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpeg";
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isJPGorPng) {
+        this.$message.error("上传图片只能是 JPG/jpeg/png 格式!");
+      }
+      if (!isLt10M) {
+        this.$message.error("上传图片大小不能超过 10MB!");
+      }
+      return isJPGorPng && isLt10M;
+
+      return false;
+    },
+    uploadSuccess(res, file) {
+      this.ruleForm.filepath = res.filepath;
+      //   console.log(res, file);
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
     }
   }
 };
@@ -134,5 +177,28 @@ export default {
 .form_header {
   text-align: center;
   margin-bottom: 10px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

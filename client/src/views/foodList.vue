@@ -48,6 +48,24 @@
           <el-form-item label="电话" prop="phone">
             <el-input v-model.number="dialogForm.phone"></el-input>
           </el-form-item>
+          <el-form-item label="修改美食图片" prop="filepath">
+            <el-upload
+              class="avatar-uploader"
+              ref="upload"
+              action="http://localhost:3000/posts/img"
+              :before-upload="beforeUpload"
+              :on-success="uploadSuccess"
+              :limit="1"
+            >
+              <img
+                v-if="dialogForm.filepath"
+                :src="'http://localhost:3000' + dialogForm.filepath"
+                class="avatar"
+              >
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10m</div>
+            </el-upload>
+          </el-form-item>
           <el-form-item>
             <el-row type="flex" justify="center">
               <el-button type="primary" @click="onSubmit('dialogForm')">提交修改</el-button>
@@ -182,6 +200,30 @@ export default {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
       this.getList();
+    },
+    beforeUpload(file) {
+      console.log(file.type);
+      const isJPGorPng =
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpeg";
+      const isLt10M = file.size / 1024 / 1024 < 10;
+      if (!isJPGorPng) {
+        this.$message.error("上传图片只能是 JPG/jpeg/png 格式!");
+      }
+      if (!isLt10M) {
+        this.$message.error("上传图片大小不能超过 10MB!");
+      }
+      return isJPGorPng && isLt10M;
+
+      return false;
+    },
+    uploadSuccess(res, file) {
+      this.ruleForm.filepath = res.filepath;
+      //   console.log(res, file);
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
     }
   }
 };
@@ -194,5 +236,28 @@ export default {
 .el-form-item {
   margin-right: 0;
   margin-bottom: 20px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

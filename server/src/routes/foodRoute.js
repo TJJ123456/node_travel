@@ -11,9 +11,17 @@ route.post('/create', async (req, res, next) => {
         const food = await getByname(req.body.name);
         console.log(food);
         if (food) {
-            throw new Error('已有同名的食品');
+            throw new Error('已有同名的美食');
         }
-        const newDoc = await Foods.insert(req.body);
+        const doc = {
+            name: req.body.name,
+            desc: req.body.desc,
+            address: req.body.address,
+            type: req.body.type,
+            filepath: req.body.filepath,
+            phone: req.body.phone
+        };
+        const newDoc = await Foods.insert(doc);
         res.json({ status: 'ok' })
     } catch (e) {
         console.log(e.message);
@@ -157,6 +165,7 @@ route.post('/change', async (req, res, next) => {
             desc: req.body.desc,
             address: req.body.address,
             type: req.body.type,
+            filepath: req.body.filepath || '',
             phone: req.body.phone,
         }
         let doc = await Foods.update({ _id: id }, data);
