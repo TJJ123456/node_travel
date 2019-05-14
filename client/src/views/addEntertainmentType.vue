@@ -65,7 +65,7 @@ export default {
           type: "success"
         });
         this.resetForm('ruleForm');
-        this.$router.push({ path: "/entertainmentTypeList" });
+        this.$router.push({ path: "/entertainmentTypesList" });
       }
     },
     resetForm(formName) {

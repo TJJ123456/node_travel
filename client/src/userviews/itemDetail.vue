@@ -46,7 +46,7 @@
                       text-color="#ff9900"
                       score-template="{value}"
                     ></el-rate>
-                    <span class="average">人均 {{getAverage}} 元</span>
+                    <span class="average">人均 {{item.average}} 元</span>
                   </p>
                   <div class="info J-info-short clearfix">
                     <p class="desc">{{item.content}}</p>
@@ -61,6 +61,21 @@
           </template>
           <h2 v-else>暂无评论</h2>
         </div>
+        <div id="addreview-wrapper" style="overflow:hidden" v-if="$state.user">
+          <div class="comment-write" id="comment-write">
+            <h3 class="title1">去过{{item.name}}?给大家分享体验</h3>
+            <div class="content">
+              <a class="avatar">
+                <img src="http://localhost:3000/public/img/logo.png" alt>
+              </a>
+              <p class="user-info">{{$state.user.username}}</p>
+              <el-rate v-model.number="myComment.score" show-text></el-rate>
+              <textarea minlength="1" v-model="myComment.content" name id cols="30" rows="10"></textarea>
+              <input class="avg" v-model="myComment.average" placeholder="人均消费" type="number">
+              <a @click="createComment()" class="submit J-submit">发表</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +87,14 @@ export default {
   data() {
     return {
       item: {},
-      commentList: []
+      commentList: [],
+      myComment: {
+        score: null,
+        average: null,
+        content: null,
+        type: parseInt(this.type),
+        itemid: this.id
+      }
     };
   },
   computed: {
@@ -92,18 +114,22 @@ export default {
   },
   methods: {
     async initData() {
-      console.log("拉数据");
       switch (parseInt(this.type)) {
         case 0:
-          let data = await this.$fetch("food/getfood", {
+          this.item = (await this.$fetch("food/getfood", {
             method: "POST",
             body: JSON.stringify({
               id: this.id
             })
-          });
-          this.item = data.data;
+          })).data;
           break;
         case 1:
+          this.item = (await this.$fetch("entertainment/get", {
+            method: "POST",
+            body: JSON.stringify({
+              id: this.id
+            })
+          })).data;
           break;
         case 2:
           break;
@@ -140,7 +166,66 @@ export default {
         name: "comment",
         params: { type: this.type, id: this.id }
       });
-    }
+    },
+    async createComment() {
+      if(!this.myComment.average){
+        this.$message({
+          showClose: true,
+          message: '请填写人均消费',
+          type: "error"
+        });
+        return;
+      }
+      if(!this.myComment.content){
+        this.$message({
+          showClose: true,
+          message: '请填写评论内容',
+          type: "error"
+        });
+        return;
+      }
+      if(!this.myComment.score){
+        this.$message({
+          showClose: true,
+          message: '请选择评分',
+          type: "error"
+        });
+        return;
+      }
+      if(!this.myComment.average){
+        this.$message({
+          showClose: true,
+          message: '请填写人均消费',
+          type: "error"
+        });
+        return;
+      }
+      let data = await this.$fetch("comment/create", {
+        method: "POST",
+        body: JSON.stringify(this.myComment)
+      });
+      if (data.err) {
+        if (data.msg === "请登录") {
+          this.$router.replace("/home/login", "");
+        }
+        this.$message({
+          showClose: true,
+          message: data.msg,
+          type: "error"
+        });
+      } else {
+        this.$message({
+          showClose: true,
+          message: "评论成功，等待审核",
+          type: "success"
+        });
+        this.resetForm("ruleForm");
+        this.$router.push({
+          name: "itemDetail",
+          params: { type: this.type, id: this.id }
+        });
+      }
+    },
   },
   props: {
     type: {
@@ -406,5 +491,113 @@ h2 {
 }
 .time {
   font-size: 12px;
+}
+
+#addreview-wrapper {
+  margin-top: 10px;
+  background: #fff;
+}
+
+#addreview-wrapper .comment-write {
+  border: 1px solid #f0f0f0;
+  padding-left: 25px;
+  padding-bottom: 25px;
+}
+.comment-write {
+  padding-top: 25px;
+}
+.comment-write,
+.friends-comment .qq-friends {
+  border-top: 1px solid #e0e0e0;
+}
+
+.comment-write .title1 {
+  font-size: 14px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong {
+  font-weight: 400;
+}
+.comment-write .content {
+  position: relative;
+  padding-left: 80px;
+  margin-top: 20px;
+}
+
+.comment-friend-card .avatar,
+.comment-friend-card-simple .avatar,
+.comment-item .avatar,
+.comment-user-card .info .avatar,
+.comment-write .content .avatar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 60px;
+}
+a {
+  color: #282828;
+  cursor: pointer;
+}
+.comment-friend-card .avatar img,
+.comment-friend-card-simple .avatar img,
+.comment-item .avatar img,
+.comment-user-card .info .avatar img,
+.comment-write .content .avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.comment-write .content .user-info {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+#addreview-wrapper .comment-write .content textarea {
+  width: 710px;
+}
+
+.comment-write .content textarea {
+  width: 578px;
+  height: 36px;
+  line-height: 18px;
+  padding: 7px 10px;
+  border: 1px solid #e0e0e0;
+  margin-top: 15px;
+}
+body,
+button,
+input,
+select,
+textarea {
+  font: 12px/1.5 "Microsoft YaHei", "Hiragino Sans GB";
+}
+.avg {
+  width: 150px;
+  height: 20px;
+  line-height: 18px;
+  padding: 7px 10px;
+  border: 1px solid #e0e0e0;
+  margin-top: 15px;
+}
+.comment-write .submit {
+  display: block;
+  height: 30px;
+  width: 38px;
+  line-height: 30px;
+  padding: 0 30px;
+  font-size: 14px;
+  background-color: #ff7200;
+  color: #fff;
+  margin-top: 25px;
+  border-radius: 2px;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>

@@ -38,10 +38,12 @@ async function createUser({ username, password }) {
     if (user) {
         throw new Error('用户名已注册')
     } else {
+        let time = new Date();
         const hash = await hashPassword(password)
         const result = await Users.insert({
             username,
             password: hash,
+            createTime: time.getTime(),
         })
 
         return result
@@ -103,6 +105,30 @@ route.get('/count', async (req, res, next) => {
 
 })
 
+route.get('/todaycount', async (req, res, next) => {
+    try {
+        const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+        let data = await Users.count({}, { $gt: { createTime: start } });
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+
+})
+
+route.get('/list', async (req, res, next) => {
+    try {
+        let data = await Users.find({});
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
 route.post('/list', async (req, res, next) => {
     const limit = req.body.limit;
     const offset = req.body.offset;
@@ -115,5 +141,29 @@ route.post('/list', async (req, res, next) => {
         res.status(405).send(e.message);
     }
 })
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+async function createUserRandom() {
+    const start = new Date(new Date().toLocaleDateString()).getTime();
+    for (let i = 6; i > -1; i--) {
+        let count = Math.round(Math.random() * 10);
+        for (let j = 0; j < count; ++j) {
+            const username = rand(1000, 9999);
+            const user = await getByUsername(username);
+            if (!user) {
+                let time = start - 86400000 * i + rand(0, 99999);
+                // const hash = await hashPassword(123)
+                const result = await Users.insert({
+                    username,
+                    password: 123,
+                    createTime: time,
+                })
+            }
+        }
+    }
+}
+
+// createUserRandom();
 
 export default route;

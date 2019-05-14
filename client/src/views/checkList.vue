@@ -30,6 +30,9 @@
             <span>用户名：{{dialogForm.username}}</span>
           </div>
           <div>
+            <span>人均消费：{{dialogForm.average}}</span>
+          </div>
+          <div>
             <span>评论内容：{{dialogForm.content}}</span>
           </div>
           <el-form-item>
@@ -55,15 +58,6 @@ export default {
       dialogFormVisible: false,
       loading: false,
       dialogForm: {},
-      dialogFormrules: {
-        name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
-        desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
-        type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
-        price: [
-          { required: true, message: "价格不能为空", trigger: "blur" },
-          { type: "number", message: "价格必须为数字值" }
-        ]
-      }
     };
   },
   created() {

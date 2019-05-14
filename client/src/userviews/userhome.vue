@@ -13,13 +13,10 @@
             </a>
           </div>
           <div class="cata-con">
-            <div class="cata-shop-item" v-for="(item, index) in foodlist" :key="index">
+            <div class="cata-shop-item" v-for="(item, index) in showlist(0)" :key="index">
               <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="http://localhost:3000/public/img/default.jpg"
-                    @click="toDetail(0, item._id)"
-                  >
+                <a class="shop-img shop-item-pic" @click="toDetail(0, item._id)">
+                  <img :src="getImgPath(item.filepath)" alt>
                 </a>
                 <div class="shop-info tag-single">
                   <a class="shop-name" @click="toDetail(0, item._id)">
@@ -30,7 +27,6 @@
                     <span class="comment">{{getCommentNum(item._id)}}条点评</span>
                   </div>
                   <div class="area-info">
-                    <!-- <span class="region-name">{{item.address}}</span> -->
                     <span class="maincate-name">{{item.typename}}</span>
                   </div>
                   <div class="avg">
@@ -46,133 +42,30 @@
             <div class="title-dec">
               <i class="el-icon-star-off" style="color:#f63;"></i> 休闲娱乐
             </div>
-            <a class="view-more">
+            <a class="view-more" @click="toShoplist(1)">
               <span>全部</span>
               <span class="arrow-right el-icon-arrow-right"></span>
             </a>
           </div>
           <div class="cata-con">
-            <div class="cata-shop-item">
+            <div class="cata-shop-item" v-for="(item, index) in showlist(1)" :key="index">
               <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                    alt
-                  >
+                <a class="shop-img shop-item-pic" @click="toDetail(1, item._id)">
+                  <img :src="getImgPath(item.filepath)" alt>
                 </a>
                 <div class="shop-info tag-single">
-                  <a class="shop-name">
-                    <span class="name-desc">刘三姐的家</span>
+                  <a class="shop-name" @click="toDetail(1, item._id)">
+                    <span class="name-desc">{{item.name}}</span>
                   </a>
                   <div class="star-info">
-                    <span class="comment">100条点评</span>
+                    <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
+                    <span class="comment">{{getCommentNum(item._id)}}条点评</span>
                   </div>
                   <div class="area-info">
-                    <span class="region-name">地址</span>
-                    <span class="maincate-name">本地菜</span>
+                    <span class="maincate-name">{{item.typename}}</span>
                   </div>
                   <div class="avg">
-                    <span>￥100/人</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cata-shop-item">
-              <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                    alt
-                  >
-                </a>
-                <div class="shop-info tag-single">
-                  <a class="shop-name">
-                    <span class="name-desc">刘三姐的家</span>
-                  </a>
-                  <div class="star-info">
-                    <span class="comment">100条点评</span>
-                  </div>
-                  <div class="area-info">
-                    <span class="region-name">地址</span>
-                    <span class="maincate-name">本地菜</span>
-                  </div>
-                  <div class="avg">
-                    <span>￥100/人</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cata-shop-item">
-              <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                    alt
-                  >
-                </a>
-                <div class="shop-info tag-single">
-                  <a class="shop-name">
-                    <span class="name-desc">刘三姐的家</span>
-                  </a>
-                  <div class="star-info">
-                    <span class="comment">100条点评</span>
-                  </div>
-                  <div class="area-info">
-                    <span class="region-name">地址</span>
-                    <span class="maincate-name">本地菜</span>
-                  </div>
-                  <div class="avg">
-                    <span>￥100/人</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cata-shop-item">
-              <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                    alt
-                  >
-                </a>
-                <div class="shop-info tag-single">
-                  <a class="shop-name">
-                    <span class="name-desc">刘三姐的家</span>
-                  </a>
-                  <div class="star-info">
-                    <span class="comment">100条点评</span>
-                  </div>
-                  <div class="area-info">
-                    <span class="region-name">地址</span>
-                    <span class="maincate-name">本地菜</span>
-                  </div>
-                  <div class="avg">
-                    <span>￥100/人</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cata-shop-item">
-              <div class="shop-item">
-                <a class="shop-img shop-item-pic">
-                  <img
-                    src="https://img.meituan.net/msmerchant/07776b2b4260d93bb983ea8f95fc03ca415523.jpg%40340w_192h_1e_1l%7Cwatermark%3D0"
-                    alt
-                  >
-                </a>
-                <div class="shop-info tag-single">
-                  <a class="shop-name">
-                    <span class="name-desc">刘三姐的家</span>
-                  </a>
-                  <div class="star-info">
-                    <span class="comment">100条点评</span>
-                  </div>
-                  <div class="area-info">
-                    <span class="region-name">地址</span>
-                    <span class="maincate-name">本地菜</span>
-                  </div>
-                  <div class="avg">
-                    <span>￥100/人</span>
+                    <span>￥{{item.avg}}/人</span>
                   </div>
                 </div>
               </div>
@@ -189,7 +82,8 @@ export default {
   data() {
     return {
       foodlist: [],
-      commentList: []
+      commentList: [],
+      entertainmentList: []
     };
   },
   created() {
@@ -202,12 +96,25 @@ export default {
     async initData() {
       let data = await this.$fetch("food/foodlist");
       let comment = await this.$fetch("comment/passlist");
+      let entertainment = await this.$fetch("entertainment/list");
       this.foodlist = data.data;
       this.commentList = comment.data;
+      this.entertainmentList = entertainment.data;
       this.foodlist.forEach(item => {
         item.score = parseFloat(this.getScore(item._id)) || 0;
         item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
+      this.entertainmentList.forEach(item => {
+        item.score = parseFloat(this.getScore(item._id)) || 0;
+        item.avg = parseFloat(this.getaverage(item._id)) || 0;
+      });
+    },
+    showlist(type) {
+      if (type === 0) {
+        return this.foodlist.slice(0, 6);
+      } else if (type === 1) {
+        return this.entertainmentList.slice(0, 6);
+      }
     },
     toDetail(type, id) {
       this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
@@ -233,8 +140,11 @@ export default {
       return itemArr.length;
     },
     toShoplist(type) {
-      console.log("去shoplist", type);
       this.$router.push({ name: "shoplist", params: { type: type } });
+    },
+    getImgPath(path) {
+      if (path && path !== "") return "http://localhost:3000" + path;
+      return "http://localhost:3000/public/img/default.jpg";
     }
   }
 };

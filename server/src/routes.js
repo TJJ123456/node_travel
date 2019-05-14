@@ -6,6 +6,7 @@ import userRoute from './routes/userRoute';
 import commentRoute from './routes/commentsRoute';
 import postRoute from './routes/postRoute';
 import entertainmentRoute from './routes/entertainmentRoute';
+import searchRoute from './routes/searchRoute';
 
 function privateRoute(req, res, next) {
   if (!req.user) {
@@ -30,6 +31,7 @@ export default function (app) {
   app.use('/comment', commentRoute);
   app.use('/posts', postRoute);
   app.use('/entertainment', entertainmentRoute);
+  app.use('/search', searchRoute);
 
   app.get('/manager1', (req, res) => {
     if (!req.session.manager) {

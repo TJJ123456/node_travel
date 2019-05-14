@@ -27,10 +27,10 @@
             <span class="search-container clearfix">
               <i class="el-icon-search i-search"></i>
               <span>
-                <input type="text">
+                <input v-model="keyword" type="text">
               </span>
               <span class="search-bnt-panel">
-                <a class="search-btn">搜索</a>
+                <a @click="toSearch()" class="search-btn">搜索</a>
               </span>
             </span>
           </div>
@@ -41,6 +41,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      keyword: ""
+    };
+  },
   computed: {
     defaultActive: function() {
       return this.$route.path.replace("/", "");
@@ -68,11 +73,25 @@ export default {
       this.$router.push({ path: "/home/myview" });
     },
     checkRoute() {
-      console.log(
-        "/home/myview" !== this.$route.path,
-        this.$route.params.path
-      );
+      console.log("/home/myview" !== this.$route.path, this.$route.params.path);
       return "/home/myview" !== this.$route.path;
+    },
+    toSearch() {
+      console.log("xxxxxxxxxxxxxxx", this.keyword);
+      if (this.keyword === "") {
+        return;
+      }
+      if (this.$route.name === "search") {
+        console.log("111111", this.keyword);
+        this.$router.replace({
+          name: "search",
+          params: { keyword: this.keyword }
+        });
+      } else
+        this.$router.push({
+          name: "search",
+          params: { keyword: this.keyword }
+        });
     }
   }
 };

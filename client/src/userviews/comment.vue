@@ -14,6 +14,9 @@
           </div>
         </div>
       </el-form-item>
+      <el-form-item label="店名">
+        <span>{{item.name}}</span>
+      </el-form-item>
       <el-form-item label="评分" prop="score">
         <el-rate v-model.number="ruleForm.score" show-text></el-rate>
       </el-form-item>
@@ -47,12 +50,13 @@
 export default {
   data() {
     return {
+      item: {},
       ruleForm: {
         score: 0,
         average: "",
         content: "",
         type: parseInt(this.type),
-        itemid: this.id,
+        itemid: this.id
       },
       rules: {
         score: [
@@ -67,8 +71,33 @@ export default {
       }
     };
   },
+  activated() {
+    this.initData();
+  },
   created() {},
   methods: {
+    async initData() {
+      switch (parseInt(this.type)) {
+        case 0:
+          this.item = (await this.$fetch("food/getfood", {
+            method: "POST",
+            body: JSON.stringify({
+              id: this.id
+            })
+          })).data;
+          break;
+        case 1:
+          this.item = (await this.$fetch("entertainment/get", {
+            method: "POST",
+            body: JSON.stringify({
+              id: this.id
+            })
+          })).data;
+          break;
+        case 2:
+          break;
+      }
+    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -77,7 +106,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
-      }); 
+      });
     },
     async createComment() {
       let data = await this.$fetch("comment/create", {
@@ -100,7 +129,10 @@ export default {
           type: "success"
         });
         this.resetForm("ruleForm");
-        this.$router.push({ name: "itemDetail", params: { type: this.type, id: this.id } });
+        this.$router.push({
+          name: "itemDetail",
+          params: { type: this.type, id: this.id }
+        });
       }
     },
     resetForm(formName) {

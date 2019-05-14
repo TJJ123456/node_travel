@@ -1,4 +1,4 @@
-import { Comments, Users, Foods } from '../providers'
+import { Comments, Users, Foods, Entertainments } from '../providers'
 import express from 'express'
 const route = express.Router();
 
@@ -61,7 +61,10 @@ route.get('/list', async (req, res, next) => {
             switch (data[i].type) {
                 case Comment.Food:
                     data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
-                    break
+                    break;
+                case Comment.Entertainment:
+                    data[i].shopname = (await Entertainments.findOne({ _id: data[i].itemid })).name;
+                    break;
             }
         }
         res.json({
@@ -80,7 +83,10 @@ route.get('/passlist', async (req, res, next) => {
             switch (data[i].type) {
                 case Comment.Food:
                     data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
-                    break
+                    break;
+                case Comment.Entertainment:
+                    data[i].shopname = (await Entertainments.findOne({ _id: data[i].itemid })).name;
+                    break;
             }
         }
         res.json({
@@ -107,6 +113,36 @@ route.post('/itemlist', async (req, res, next) => {
     }
 })
 
+route.get('/userlist', async (req, res, next) => {
+    try {
+        if (!req.session.user) {
+            throw new Error('请登录');
+        }
+        let data = await Comments.find({ userid: req.session.user._id });
+        for (let i in data) {
+            data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
+            switch (data[i].type) {
+                case Comment.Food:
+                    let food = await Foods.findOne({ _id: data[i].itemid });
+                    data[i].shopname = food.name;
+                    data[i].shopaddress = food.address;
+                    break;
+                case Comment.Entertainment:
+                    let shop = await Entertainments.findOne({ _id: data[i].itemid });
+                    data[i].shopname = shop.name;
+                    data[i].shopaddress = shop.address;
+                    break;
+            }
+        }
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        console.log(e.message);
+        res.status(405).send(e.message);
+    }
+})
+
 route.get('/checklist', async (req, res, next) => {
     try {
         let data = await Comments.find({ commentType: commentType.Wait });
@@ -115,7 +151,11 @@ route.get('/checklist', async (req, res, next) => {
             switch (data[i].type) {
                 case Comment.Food:
                     data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
-                    break
+                    break;
+                case Comment.Entertainment:
+                    let shop = await Entertainments.findOne({ _id: data[i].itemid });
+                    data[i].shopname = shop.name;
+                    break;
             }
         }
         res.json({
@@ -149,7 +189,7 @@ route.post('/change', async (req, res, next) => {
 route.post('/pass', async (req, res, next) => {
     const id = req.body.id;
     try {
-        console.log('审核一次');
+        console.log('审核一次', id);
         let data = await Comments.updateOne({ _id: id }, { $set: { 'commentType': commentType.Pass } });
         res.json({ status: 'ok' })
     } catch (e) {
@@ -158,7 +198,7 @@ route.post('/pass', async (req, res, next) => {
 })
 
 route.post('/nopass', async (req, res, next) => {
-    const id = req.body._id;
+    const id = req.body.id;
     try {
         let data = await Comments.updateOne({ _id: id }, { $set: { 'commentType': commentType.NoPass } });
         res.json({ status: 'ok' })

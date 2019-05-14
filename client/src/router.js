@@ -38,6 +38,7 @@ import uplanList from './userviews/planList.vue';
 import itemDetail from './userviews/itemDetail.vue';
 import comment from './userviews/comment.vue';
 import shopList from './userviews/shopList.vue';
+import searchview from './userviews/searchview.vue';
 
 const routes = [
     {
@@ -92,7 +93,13 @@ const routes = [
             name: 'shoplist',
             component: shopList,
             props: true,
-        }
+        },
+        {
+            path: '/home/search/:keyword',
+            name: 'search',
+            component: searchview,
+            props: true
+        },
         ]
     },
     { path: '/managerlogin', name: 'managerlogin', component: mangerLogin },

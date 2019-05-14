@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-0"
+    "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-0",
+    "addUser": "node src/adduser.js --exec babel-node --presets es2015,stage-0"
   },
   "author": "",
   "license": "ISC",

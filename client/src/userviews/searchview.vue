@@ -1,27 +1,5 @@
 <template>
   <div class="section Fix J-shop-search">
-    <div class="navigation">
-      <div class="nav-category J_filter_category">
-        <h4>分类:</h4>
-        <a class="def" :class="{cur: selectTypeIndex === -1}" @click="changeSelectType(-1)">
-          <span>不限</span>
-        </a>
-        <div class="nc-contain" style="height:50px;">
-          <div class="con">
-            <div id="classfy" class="nc-items nc-more">
-              <a
-                v-for="(item, index) in typelist"
-                :key="index"
-                :class="{cur: selectTypeIndex === index}"
-                @click="changeSelectType(index)"
-              >
-                <span>{{item.name}}</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="content-wrap">
       <div class="shop-wrap">
         <div class="content" style="overflow:hidden">
@@ -98,8 +76,8 @@ export default {
       selectTypeIndex: -1,
       sortType: 0,
       value: 5,
-      shoplist: {},
-      typelist: {},
+      shoplist: [],
+      typelist: [],
       commentList: []
     };
   },
@@ -142,31 +120,27 @@ export default {
     }
   },
   activated() {
+    // this.initData();
+  },
+  watch: {
+    keyword() {
+      this.initData();
+    }
+  },
+  created() {
     this.initData();
   },
-  // created() {
-  //   this.initData();
-  // },
   methods: {
     async initData() {
       let data = [];
       let type = [];
-      switch (parseInt(this.type)) {
-        case 0:
-          data = await this.$fetch("food/foodlist");
-          this.shoplist = data.data;
-          type = await this.$fetch("food/foodtypelist");
-          this.typelist = type.data;
-          break;
-        case 1:
-          data = await this.$fetch("entertainment/list");
-          this.shoplist = data.data;
-          type = await this.$fetch("entertainment/typelist");
-          this.typelist = type.data;
-          break;
-        case 2:
-          break;
-      }
+      data = await this.$fetch("search/", {
+        method: "POST",
+        body: JSON.stringify({
+          keyword: this.keyword
+        })
+      });
+      this.shoplist = data.data;
       let list = await this.$fetch("comment/passlist");
       this.commentList = list.data;
       this.commentList.forEach(item => {
@@ -214,7 +188,7 @@ export default {
     }
   },
   props: {
-    type: {
+    keyword: {
       required: true
     }
   }
