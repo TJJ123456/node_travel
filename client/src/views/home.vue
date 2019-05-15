@@ -46,6 +46,8 @@
 <script>
 import echarts from "echarts";
 import dtime from "time-formater";
+import moment from "moment";
+moment.locale("zh-cn");
 export default {
   data() {
     return {
@@ -100,6 +102,9 @@ export default {
       this.userList = user.data;
       this.commentList = comment.data;
     },
+    formatTime(time) {
+      return moment(time).format("LL");
+    },
     drawLine() {
       const sevenDay = [];
       const sevenCommentData = [];
@@ -127,9 +132,14 @@ export default {
             return false;
           }
         });
-        let userArr = this.commentList.filter(item => {
+        let userArr = this.userList.filter(item => {
           if (item.createTime) {
             let begin = start - 86400000 * i;
+            console.log(
+              this.formatTime(begin),
+              this.formatTime(item.createTime),
+              this.formatTime(begin + 86400000)
+            );
             return (
               item.createTime > begin && item.createTime < begin + 86400000
             );

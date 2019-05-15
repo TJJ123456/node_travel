@@ -4,6 +4,7 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="time" label="注册时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -23,6 +24,8 @@
   </div>
 </template>
 <script>
+import moment from "moment";
+moment.locale("zh-cn");
 export default {
   data() {
     return {
@@ -33,7 +36,7 @@ export default {
       count: 0,
       tableData: [],
       dialogFormVisible: false,
-      loading: false,
+      loading: false
     };
   },
   created() {
@@ -64,6 +67,9 @@ export default {
         })
       });
       this.tableData = data.data;
+      this.tableData.forEach(item => {
+        item.time = this.formatTime(item.createTime);
+      });
     },
     handleEdit(index, row) {
       this.editIndex = index;
@@ -106,6 +112,9 @@ export default {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
       this.getList();
+    },
+    formatTime(time) {
+      return moment(time).format("LL");
     }
   }
 };

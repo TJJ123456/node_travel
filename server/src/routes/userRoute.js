@@ -153,10 +153,10 @@ async function createUserRandom() {
             const user = await getByUsername(username);
             if (!user) {
                 let time = start - 86400000 * i + rand(0, 99999);
-                // const hash = await hashPassword(123)
+                const hash = await hashPassword('123')
                 const result = await Users.insert({
                     username,
-                    password: 123,
+                    password: hash,
                     createTime: time,
                 })
             }
