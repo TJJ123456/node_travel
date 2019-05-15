@@ -29,7 +29,7 @@
           <el-form-item label="名称" prop="name">
             <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="描述" prop="desc">
+          <el-form-item label="描述" prop="desc" type="textarea">
             <el-input v-model="dialogForm.desc"></el-input>
           </el-form-item>
           <el-form-item label="地址" prop="address">

@@ -1,4 +1,4 @@
-import { Foods, FoodTypes } from '../providers'
+import { Foods, FoodTypes, Comments } from '../providers'
 import express from 'express'
 const route = express.Router();
 
@@ -104,6 +104,9 @@ route.post('/foodtypelist', async (req, res, next) => {
     const offset = req.body.offset;
     try {
         let data = await FoodTypes.find({}, { limit: limit, skip: offset });
+        for (let i in data) {
+            data[i].foodcount = await Foods.count({ type: data[i]._id });
+        }
         res.json({
             data: data
         });
@@ -116,8 +119,11 @@ route.get('/foodlist', async (req, res, next) => {
     try {
         let data = await Foods.find({});
         for (let i in data) {
-            data[i].typename = (await FoodTypes.findOne({ _id: data[i].type })).name;
+            let type = await FoodTypes.findOne({ _id: data[i].type });
+            data[i].typename = type.name;
+            data[i].commentCount = await Comments.count({itemid: data[i]._id});
         }
+
         res.json({
             data: data
         });
@@ -129,6 +135,9 @@ route.get('/foodlist', async (req, res, next) => {
 route.get('/foodtypelist', async (req, res, next) => {
     try {
         let data = await FoodTypes.find({});
+        for (let i in data) {
+            data[i].foodcount = await Foods.count({ type: data[i]._id });
+        }
         res.json({
             data: data
         });

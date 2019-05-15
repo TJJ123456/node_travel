@@ -14,6 +14,7 @@ import addPlan from './views/addPlan.vue';
 import addSpot from './views/addSpot.vue';
 import addFoodType from './views/addFoodType.vue';
 import foodList from './views/foodList.vue';
+import foodChart from './views/foodChart.vue';
 import hotelList from './views/hotelList.vue';
 import planList from './views/planList.vue';
 import spotList from './views/spotList.vue';
@@ -42,7 +43,7 @@ import searchview from './userviews/searchview.vue';
 
 const routes = [
     {
-        path: '/', name: 'userhome', component: userLayout,
+        path: '/', name: 'uhome', component: userLayout,
         children: [{
             path: '/',
             component: userhome,
@@ -68,13 +69,14 @@ const routes = [
         },
         {
             path: '/home/login',
+            name: 'userLogin',
             component: userLogin,
             meta: [],
         },
         {
             path: '/home/myview',
             component: myview,
-            meta: [],
+            meta: { private: true, },
         },
         {
             path: 'Detail/:type/:id',
@@ -86,7 +88,8 @@ const routes = [
             path: 'Detail/:type/:id/comment',
             name: 'comment',
             component: comment,
-            props: true,
+            meta: { private: true },
+            props: true
         },
         {
             path: '/:type/shoplist',
@@ -144,6 +147,10 @@ const routes = [
             path: '/foodList',
             component: foodList,
             meta: ['数据管理', '美食列表'],
+        }, {
+            path: '/foodChart',
+            component: foodChart,
+            meta: ['数据管理', '美食数据图表'],
         }, {
             path: '/foodtypeList',
             component: foodTypeList,
@@ -211,14 +218,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    console.log('to', to.name, to.meta, to.fullPath);
+    console.log('路由', to.matched.some(r => r.meta.private), state.user, to.matched.some(r => r.meta.private) && !state.user);
     // if (to.meta.private && !state.user) {
     if (to.matched.some(r => r.meta.manager) && !state.manager) {
         next({ name: 'managerlogin', params: { wantedRoute: to.fullPath } });
         return;
     }
     if (to.matched.some(r => r.meta.private) && !state.user) {
-        next({ name: 'login', params: { wantedRoute: to.fullPath } });
+        next({ name: 'userLogin', params: { wantedRoute: to.fullPath } });
         return;
     }
     if (to.matched.some(r => r.meta.guest) && state.user) {

@@ -1,87 +1,97 @@
 <template>
-  <div class="section Fix J-shop-search">
-    <div class="navigation">
-      <div class="nav-category J_filter_category">
-        <h4>分类:</h4>
-        <a class="def" :class="{cur: selectTypeIndex === -1}" @click="changeSelectType(-1)">
-          <span>不限</span>
-        </a>
-        <div class="nc-contain" style="height:50px;">
-          <div class="con">
-            <div id="classfy" class="nc-items nc-more">
-              <a
-                v-for="(item, index) in typelist"
-                :key="index"
-                :class="{cur: selectTypeIndex === index}"
-                @click="changeSelectType(index)"
-              >
-                <span>{{item.name}}</span>
-              </a>
+  <div>
+    <div class="section Fix J-shop-search">
+      <div class="navigation">
+        <div class="nav-category J_filter_category">
+          <h4>分类:</h4>
+          <a class="def" :class="{cur: selectTypeIndex === -1}" @click="changeSelectType(-1)">
+            <span>不限</span>
+          </a>
+          <div class="nc-contain" style="height:50px;">
+            <div class="con">
+              <div id="classfy" class="nc-items nc-more">
+                <a
+                  v-for="(item, index) in typelist"
+                  :key="index"
+                  :class="{cur: selectTypeIndex === index}"
+                  @click="changeSelectType(index)"
+                >
+                  <span>{{item.name}}</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="content-wrap">
-      <div class="shop-wrap">
-        <div class="content" style="overflow:hidden">
-          <div class="filter-box J_filter_box" style="overflow:hidden">
-            <div class="filt-service">
-              <ul>
-                <li>
-                  <a :class="{cur: sortType === 0}" @click="setSortType(0)">智能</a>
-                  <em class="sep">|</em>
-                </li>
-                <li>
-                  <a :class="{cur: sortType === 1}" @click="setSortType(1)">好评</a>
-                  <em class="sep">|</em>
-                </li>
-                <li>
-                  <a :class="{cur: sortType === 2}" @click="setSortType(2)">评论最多</a>
-                  <em class="sep">|</em>
-                </li>
-                <li>
-                  <a :class="{cur: sortType === 3}" @click="setSortType(3)">人均最少</a>
+      <div class="content-wrap">
+        <div class="shop-wrap">
+          <div class="content" style="overflow:hidden">
+            <div class="filter-box J_filter_box" style="overflow:hidden">
+              <div class="filt-service">
+                <ul>
+                  <li>
+                    <a :class="{cur: sortType === 0}" @click="setSortType(0)">智能</a>
+                    <em class="sep">|</em>
+                  </li>
+                  <li>
+                    <a :class="{cur: sortType === 1}" @click="setSortType(1)">好评</a>
+                    <em class="sep">|</em>
+                  </li>
+                  <li>
+                    <a :class="{cur: sortType === 2}" @click="setSortType(2)">评论最多</a>
+                    <em class="sep">|</em>
+                  </li>
+                  <li>
+                    <a :class="{cur: sortType === 3}" @click="setSortType(3)">人均最少</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="shop-list J_shop-list shop-all-list" id="shop-all-list">
+              <ul style="overflow:hidden">
+                <li v-for="(item, index) in showList" :key="index">
+                  <div class="pic">
+                    <a @click="toDetail(0, item._id)">
+                      <img src="http://localhost:3000/public/img/default.jpg" alt>
+                    </a>
+                  </div>
+                  <div class="txt">
+                    <div class="tit">
+                      <a @click="toDetail(0, item._id)">
+                        <h4>{{item.name}}</h4>
+                      </a>
+                    </div>
+                    <div class="comment">
+                      <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
+                      <a>{{getCommentNum(item._id)}}条点评</a>
+                      <em class="sep">|</em>
+                      <a>人均￥{{item.avg}}</a>
+                    </div>
+                    <div class="tag-addr">
+                      <a>{{item.typename}}</a>
+                      <em class="sep">|</em>
+                      <a>{{item.address}}</a>
+                    </div>
+                  </div>
+                  <div class="svr-info">
+                    <a>{{item.desc}}</a>
+                  </div>
                 </li>
               </ul>
             </div>
-          </div>
-          <div class="shop-list J_shop-list shop-all-list" id="shop-all-list">
-            <ul style="overflow:hidden">
-              <li v-for="(item, index) in showList" :key="index">
-                <div class="pic">
-                  <a @click="toDetail(0, item._id)">
-                    <img src="http://localhost:3000/public/img/default.jpg" alt>
-                  </a>
-                </div>
-                <div class="txt">
-                  <div class="tit">
-                    <a @click="toDetail(0, item._id)">
-                      <h4>{{item.name}}</h4>
-                    </a>
-                  </div>
-                  <div class="comment">
-                    <el-rate v-model="item.score" disabled show-score text-color="#ff9900"></el-rate>
-                    <a>{{getCommentNum(item._id)}}条点评</a>
-                    <em class="sep">|</em>
-                    <a>人均￥{{item.avg}}</a>
-                  </div>
-                  <div class="tag-addr">
-                    <a>{{item.typename}}</a>
-                    <em class="sep">|</em>
-                    <a>{{item.address}}</a>
-                  </div>
-                </div>
-                <div class="svr-info">
-                  <a>{{item.desc}}</a>
-                </div>
-              </li>
-            </ul>
+            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-size="10"
+              layout="total, prev, pager, next"
+              :total="shoplist.length"
+            ></el-pagination>
           </div>
         </div>
+        <div class="aside">这里放广告</div>
       </div>
-      <div class="aside"></div>
     </div>
+    <div></div>
   </div>
 </template>
 <script>
@@ -96,6 +106,9 @@ export default {
   data() {
     return {
       selectTypeIndex: -1,
+      currentPage: 1,
+      offset: 0,
+      limit: 10,
       sortType: 0,
       value: 5,
       shoplist: {},
@@ -112,6 +125,18 @@ export default {
       return Math.floor(sum / this.commentList.length);
     },
     showList() {
+      let list = this.getshopList();
+      return list.slice(this.offset, this.offset + 10);
+    }
+  },
+  activated() {
+    this.initData();
+  },
+  // created() {
+  //   this.initData();
+  // },
+  methods: {
+    getshopList() {
       let showlist = Array.from(this.shoplist);
       if (this.selectTypeIndex === -1) {
       } else {
@@ -139,15 +164,7 @@ export default {
           break;
       }
       return showlist;
-    }
-  },
-  activated() {
-    this.initData();
-  },
-  // created() {
-  //   this.initData();
-  // },
-  methods: {
+    },
     async initData() {
       let data = [];
       let type = [];
@@ -211,6 +228,10 @@ export default {
     },
     toDetail(type, id) {
       this.$router.push({ name: "itemDetail", params: { type: type, id: id } });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.offset = (val - 1) * this.limit;
     }
   },
   props: {

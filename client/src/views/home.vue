@@ -99,6 +99,7 @@ export default {
     async initData() {
       let user = await this.$fetch("user/list");
       let comment = await this.$fetch("comment/list");
+      console.log(user);
       this.userList = user.data;
       this.commentList = comment.data;
     },
@@ -135,11 +136,6 @@ export default {
         let userArr = this.userList.filter(item => {
           if (item.createTime) {
             let begin = start - 86400000 * i;
-            console.log(
-              this.formatTime(begin),
-              this.formatTime(item.createTime),
-              this.formatTime(begin + 86400000)
-            );
             return (
               item.createTime > begin && item.createTime < begin + 86400000
             );

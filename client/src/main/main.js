@@ -25,10 +25,10 @@ if (managerdata) {
   state.manager = JSON.parse(managerdata).manager;
 }
 
-let userdata = localStorage.getItem('user')
-if (userdata) {
-  state.user = JSON.parse(userdata);
-}
+// let userdata = localStorage.getItem('user')
+// if (userdata) {
+//   state.user = JSON.parse(userdata);
+// }
 console.log(state.user);
 
 async function main() {

@@ -4,6 +4,7 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="foodcount" label="美食数量"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -17,7 +18,7 @@
           :current-page="currentPage"
           :page-size="10"
           layout="total, prev, pager, next"
-          :total="count"
+          :total="tableData.length"
         ></el-pagination>
       </div>
       <el-dialog title="修改美食分类信息" :visible.sync="dialogFormVisible">
@@ -39,6 +40,7 @@
 export default {
   data() {
     return {
+      foodList: [],
       editIndex: 0,
       currentPage: 1,
       offset: 0,
@@ -59,24 +61,34 @@ export default {
       }
     };
   },
-  created() {
-    this.initData();
-  },
+  // created() {
+  //   this.initData();
+  // },
   activated() {
-    this.GetListCount();
+    this.initData();
   },
   watch: {},
   methods: {
     async initData() {
       // this.getList();
-      this.GetListCount();
+      // await this.GetListCount();
+      let data = await this.$fetch("food/foodtypelist", {
+        method: "POST",
+        body: JSON.stringify({
+          limit: this.limit,
+          offset: this.offset
+        })
+      });
+      this.tableData = data.data;
+      let foodlist = await this.$fetch("food/foodlist");
+      this.foodList = foodlist.data;
     },
     async GetListCount() {
       let data = await this.$fetch("food/foodtypecount");
-      if (data.data !== this.count) {
-        this.getList();
-        this.count = data.data;
-      }
+      // if (data.data !== this.count) {
+      //   this.getList();
+      //   this.count = data.data;
+      // }
     },
     async getList() {
       let data = await this.$fetch("food/foodtypelist", {

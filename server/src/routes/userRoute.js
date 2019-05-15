@@ -125,6 +125,7 @@ route.get('/list', async (req, res, next) => {
             data: data
         });
     } catch (e) {
+        console.log(e.message);
         res.status(405).send(e.message);
     }
 })
@@ -147,7 +148,7 @@ function rand(min, max) {
 async function createUserRandom() {
     const start = new Date(new Date().toLocaleDateString()).getTime();
     for (let i = 6; i > -1; i--) {
-        let count = Math.round(Math.random() * 10);
+        let count = Math.round(Math.random() * 30) + 10;
         for (let j = 0; j < count; ++j) {
             const username = rand(1000, 9999);
             const user = await getByUsername(username);

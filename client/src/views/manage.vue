@@ -14,6 +14,7 @@
             <el-menu-item index="foodTypeList">美食分类列表</el-menu-item>
             <el-menu-item index="addFood">添加美食</el-menu-item>
             <el-menu-item index="addFoodType">添加美食分类</el-menu-item>
+            <el-menu-item index="foodChart">美食数据图表</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
