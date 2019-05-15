@@ -237,7 +237,7 @@ route.post('/nopass', async (req, res, next) => {
 })
 
 function randomIndex(count) {
-    return Math.round(Math.random() * count);
+    return Math.round(Math.random() * (count - 1));
 }
 
 const fakeContent = [
@@ -262,10 +262,44 @@ async function createCommentRandom() {
     for (let i = 6; i > -1; i--) {
         let count = Math.round(Math.random() * 20);
         for (let j = 0; j < count; ++j) {
-            let userIndex = randomIndex(userList.length-1);
+            let userIndex = randomIndex(userList.length - 1);
             let userid = userList[userIndex]._id;
-            let itemIndex = randomIndex(foodList.length-1);
-            console.log('itemindex', itemIndex, foodList[itemIndex]);
+            let itemIndex = randomIndex(foodList.length - 1);
+            let itemid = foodList[itemIndex]._id;
+            let score = randomIndex(5);
+            let average = randomIndex(200);
+            let content = randomContent();
+            let time = start - 86400000 * i + randomIndex(99999);
+            const data = {
+                score: score,
+                average: average,
+                content: content,
+                type: 0,
+                itemid: itemid,
+                userid: userid,
+                commentType: commentType.Pass,
+                createTime: time,
+            }
+            const newDoc = await Comments.insert(data);
+
+        }
+    }
+}
+
+async function createCommentRandomEn() {
+    const start = new Date(new Date().toLocaleDateString()).getTime();
+    const foodList = await Entertainments.find({});
+    const userList = await Users.find({});
+    if (foodList.length === 0 || userList.length === 0) {
+        return;
+    }
+
+    for (let i = 6; i > -1; i--) {
+        let count = Math.round(Math.random() * 20);
+        for (let j = 0; j < count; ++j) {
+            let userIndex = randomIndex(userList.length - 1);
+            let userid = userList[userIndex]._id;
+            let itemIndex = randomIndex(foodList.length - 1);
             let itemid = foodList[itemIndex]._id;
             let score = randomIndex(5);
             let average = randomIndex(200);
