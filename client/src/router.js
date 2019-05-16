@@ -12,12 +12,14 @@ import addFood from './views/addFood.vue';
 import addHotel from './views/addHotel.vue';
 import addPlan from './views/addPlan.vue';
 import addSpot from './views/addSpot.vue';
+import addSpotType from './views/addSpotType.vue';
 import addFoodType from './views/addFoodType.vue';
 import foodList from './views/foodList.vue';
 import foodChart from './views/foodChart.vue';
 import hotelList from './views/hotelList.vue';
 import planList from './views/planList.vue';
 import spotList from './views/spotList.vue';
+import spotTypesList from './views/spotTypesList.vue';
 import userList from './views/userList.vue';
 import foodTypeList from './views/foodTypeList.vue';
 import manage from './views/manage.vue';
@@ -128,12 +130,12 @@ const routes = [
             component: addHotel,
             meta: ['添加数据', '添加酒店'],
         }, {
+            path: '/addSpotType',
+            component: addSpotType,
+            meta: ['添加数据', '添加景点类型'],
+        }, {
             path: '/addSpot',
             component: addSpot,
-            meta: ['添加数据', '添加景点'],
-        }, {
-            path: '/addPlan',
-            component: addPlan,
             meta: ['添加数据', '添加景点'],
         }, {
             path: '/addPlan',
@@ -164,9 +166,9 @@ const routes = [
             component: spotList,
             meta: ['数据管理', '景点列表'],
         }, {
-            path: '/planList',
-            component: planList,
-            meta: ['数据管理', '方案列表'],
+            path: '/spotTypesList',
+            component: spotTypesList,
+            meta: ['数据管理', '景点类型列表'],
         },
         {
             path: '/checkList',

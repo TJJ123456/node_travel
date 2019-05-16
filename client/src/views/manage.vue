@@ -27,12 +27,21 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title">
+              <i class="el-icon-document"></i>景点管理
+            </template>
+            <el-menu-item index="spotList">景点列表</el-menu-item>
+            <el-menu-item index="spotTypesList">景点分类列表</el-menu-item>
+            <el-menu-item index="addSpot">添加景点</el-menu-item>
+            <el-menu-item index="addSpotType">添加景点分类</el-menu-item>
+          </el-submenu>
+          <el-submenu index="5">
+            <template slot="title">
               <i class="el-icon-document"></i>评论管理
             </template>
             <el-menu-item index="checkList">审核列表</el-menu-item>
             <el-menu-item index="commentList">评论列表</el-menu-item>
           </el-submenu>
-          <el-submenu index="5">
+          <el-submenu index="6">
             <template slot="title">
               <i class="el-icon-document"></i>用户管理
             </template>

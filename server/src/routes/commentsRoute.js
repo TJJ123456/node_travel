@@ -1,4 +1,4 @@
-import { Comments, Users, Foods, Entertainments } from '../providers'
+import { Comments, Users, Foods, Entertainments, Spots } from '../providers'
 import express from 'express'
 const route = express.Router();
 
@@ -10,6 +10,7 @@ async function getByname(name) {
 const Comment = {};
 Comment.Food = 0;
 Comment.Entertainment = 1;
+Comment.Spot = 2;
 
 //评论审核状态
 const commentType = {};
@@ -72,6 +73,11 @@ route.get('/list', async (req, res, next) => {
                     break;
                 case Comment.Entertainment:
                     data[i].shopname = (await Entertainments.findOne({ _id: data[i].itemid })).name;
+                    break;
+                case Comment.Spot:
+                    let spot = await Spots.findOne({ _id: data[i].itemid });
+                    if (spot) data[i].shopname = spot.name;
+                    else data[i].shopname = '景点不存在'
                     break;
             }
         }
@@ -156,6 +162,11 @@ route.get('/userlist', async (req, res, next) => {
                     data[i].shopname = shop.name;
                     data[i].shopaddress = shop.address;
                     break;
+                case Comment.Spot:
+                    let spot = await Spots.findOne({ _id: data[i].itemid });
+                    data[i].shopname = spot.name;
+                    data[i].shopaddress = spot.address;
+                    break;
             }
         }
         res.json({
@@ -184,6 +195,10 @@ route.get('/checklist', async (req, res, next) => {
                 case Comment.Entertainment:
                     let shop = await Entertainments.findOne({ _id: data[i].itemid });
                     data[i].shopname = shop.name;
+                    break;
+                case Comment.Spot:
+                    let spot = await Spots.findOne({ _id: data[i].itemid });
+                    data[i].shopname = spot.name;
                     break;
             }
         }

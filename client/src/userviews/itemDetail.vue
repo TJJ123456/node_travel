@@ -191,6 +191,12 @@ export default {
           })).data;
           break;
         case 2:
+          this.item = (await this.$fetch("spot/get", {
+            method: "POST",
+            body: JSON.stringify({
+              id: this.id
+            })
+          })).data;
           break;
       }
       let list = await this.$fetch("comment/itemlist", {

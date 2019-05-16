@@ -81,14 +81,14 @@
           </div>
           <div class="bottom-list scene-list">
             <ul class="clearfix">
-              <li class="list-item">
+              <li class="list-item" v-for="(item, index) in showlist(2)" :key="index">
                 <div class="item">
-                  <a class="shop-item-pic">
-                    <img src="http://localhost:3000/public/img/default.jpg">
+                  <a class="shop-item-pic" @click="toDetail(2, item._id)">
+                    <img :src="getImgPath(item.filepath)">
                     <div class="pic-overlay"></div>
                   </a>
                   <div class="scene_desc">
-                    <a class="shop-name">xxx景区</a>
+                    <a class="shop-name" @click="toDetail(2, item._id)">{{item.name}}</a>
                   </div>
                 </div>
               </li>
@@ -106,7 +106,8 @@ export default {
     return {
       foodlist: [],
       commentList: [],
-      entertainmentList: []
+      entertainmentList: [],
+      spotList: []
     };
   },
   created() {
@@ -118,16 +119,22 @@ export default {
   methods: {
     async initData() {
       let data = await this.$fetch("food/foodlist");
+      let spot = await this.$fetch("spot/list");
       let comment = await this.$fetch("comment/passlist");
       let entertainment = await this.$fetch("entertainment/list");
       this.foodlist = data.data;
       this.commentList = comment.data;
       this.entertainmentList = entertainment.data;
+      this.spotList = spot.data;
       this.foodlist.forEach(item => {
         item.score = parseFloat(this.getScore(item._id)) || 0;
         item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
       this.entertainmentList.forEach(item => {
+        item.score = parseFloat(this.getScore(item._id)) || 0;
+        item.avg = parseFloat(this.getaverage(item._id)) || 0;
+      });
+      this.spotList.forEach(item => {
         item.score = parseFloat(this.getScore(item._id)) || 0;
         item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
@@ -137,6 +144,8 @@ export default {
         return this.foodlist.slice(0, 6);
       } else if (type === 1) {
         return this.entertainmentList.slice(0, 6);
+      } else if (type === 2) {
+        return this.spotList.slice(0, 6);
       }
     },
     toDetail(type, id) {
@@ -486,6 +495,10 @@ img {
   float: left;
   margin: 0 0 34px 20px;
 }
+.last-four-cata .scene-list .list-item a:hover {
+  cursor: pointer;
+  color: #f63;
+}
 .last-four-cata .scene-list .list-item .item {
   display: block;
   width: 100%;
@@ -533,5 +546,8 @@ img {
   word-wrap: normal;
   text-overflow: ellipsis;
   overflow: hidden;
+  &:hover {
+    color: #f63;
+  }
 }
 </style>

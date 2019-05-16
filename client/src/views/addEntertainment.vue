@@ -2,7 +2,7 @@
   <div>
     <el-row style="margin-top: 20px;">
       <el-col :span="14" :offset="4">
-        <header class="form_header">添加美食</header>
+        <header class="form_header">添加景点</header>
         <el-form
           :model="ruleForm"
           :rules="rules"
