@@ -35,7 +35,7 @@
           </h2>
           <template v-if="commentList.length > 0">
             <ul class="comment-list J-list">
-              <li class="comment-item" v-for="(item, index) in commentList" :key="index">
+              <li class="comment-item" v-for="(item, index) in showList" :key="index">
                 <p class="user-info">{{item.username}}</p>
                 <div class="content">
                   <p class="shop-info">
@@ -58,6 +58,13 @@
                 </div>
               </li>
             </ul>
+            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-size="10"
+              layout="total, prev, pager, next"
+              :total="commentList.length"
+            ></el-pagination>
           </template>
           <h2 v-else>暂无评论</h2>
         </div>
@@ -77,6 +84,51 @@
           </div>
         </div>
       </div>
+      <div id="aside" class="aside">
+        <div>
+          <div class="J_midas-4">
+            <div class="midas-wrap midas-wrap-shop">
+              <div class="clearfix">
+                <span class="tip fr">广告</span>
+                <h4>你可能会喜欢</h4>
+              </div>
+              <div class="J_con">
+                <div class="item">
+                  <div class="mn-lr">
+                    <a class="img-shop">
+                      <img src="http://localhost:3000/public/img/default.jpg" alt>
+                    </a>
+                    <p class="tit">
+                      <a
+                        style="max-width: 159px; white-space: nowrap; overflow-wrap: normal; text-overflow: ellipsis; overflow: hidden;"
+                      >xxx</a>
+                    </p>
+                    <p class="info">
+                      <span class="fr">人均￥413</span>
+                      <span class="region">xxx路</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="around-info" class="mod aside-mod around-info">
+            <h2 class="mod-title single">
+              <a class="item current">附近商户</a>
+            </h2>
+            <div class="J-panel">
+              <u class="list">
+                <li class="item">
+                  <a class="pic">
+                    <img src="http://localhost:3000/public/img/logo.png" alt>
+                  </a>
+                  <a class="title" style="position:relative;left:0;top:0;text-decoration:none;">绿茶</a>
+                </li>
+              </u>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +138,9 @@ moment.locale("zh-cn");
 export default {
   data() {
     return {
+      currentPage: 1,
+      offset: 0,
+      limit: 10,
       item: {},
       commentList: [],
       myComment: {
@@ -104,14 +159,18 @@ export default {
         sum += item.average;
       });
       return Math.floor(sum / this.commentList.length);
+    },
+    showList() {
+      let list = this.commentList;
+      return list.slice(this.offset, this.offset + 10);
     }
   },
   activated() {
     this.initData();
   },
-  created() {
-    this.initData();
-  },
+  // created() {
+  //   this.initData();
+  // },
   methods: {
     async initData() {
       switch (parseInt(this.type)) {
@@ -150,6 +209,10 @@ export default {
       // this.getList();
       // this.GetListCount();
     },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.offset = (val - 1) * this.limit;
+    },
     getScore(itemid) {
       let itemArr = this.commentList.filter(item => item.itemid === itemid);
       let sum = 0;
@@ -168,34 +231,34 @@ export default {
       });
     },
     async createComment() {
-      if(!this.myComment.average){
+      if (!this.myComment.average) {
         this.$message({
           showClose: true,
-          message: '请填写人均消费',
+          message: "请填写人均消费",
           type: "error"
         });
         return;
       }
-      if(!this.myComment.content){
+      if (!this.myComment.content) {
         this.$message({
           showClose: true,
-          message: '请填写评论内容',
+          message: "请填写评论内容",
           type: "error"
         });
         return;
       }
-      if(!this.myComment.score){
+      if (!this.myComment.score) {
         this.$message({
           showClose: true,
-          message: '请选择评分',
+          message: "请选择评分",
           type: "error"
         });
         return;
       }
-      if(!this.myComment.average){
+      if (!this.myComment.average) {
         this.$message({
           showClose: true,
-          message: '请填写人均消费',
+          message: "请填写人均消费",
           type: "error"
         });
         return;
@@ -225,7 +288,7 @@ export default {
           params: { type: this.type, id: this.id }
         });
       }
-    },
+    }
   },
   props: {
     type: {
@@ -599,5 +662,215 @@ textarea {
   border-radius: 2px;
   text-decoration: none;
   cursor: pointer;
+}
+.body .aside {
+  float: left;
+  width: 310px;
+  padding-left: 10px;
+}
+#aside-bottom .J_midas-4 {
+  padding: 0;
+  background: 0 0;
+}
+#aside-bottom .J_midas-4,
+#aside-bottom .qrcode-aside {
+  margin-top: 10px;
+}
+.J_midas-4 {
+  padding: 15px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  // margin-top: 15px;
+}
+#aside-bottom .midas-wrap {
+  padding: 15px;
+}
+#J-shop-links,
+#J_view_about,
+#around-info,
+#aside .photos-container,
+#aside-bottom .aside-mod,
+#aside-bottom .midas-wrap,
+#basic-info,
+#comment,
+#friends-comment,
+#myreview-wrapper > div,
+#relevance-group,
+#sales,
+#shop-tabs,
+.shop-owner {
+  border: 1px solid #f0f0f0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.J_midas-4 .midas-wrap-shop {
+  margin-top: 0;
+}
+.midas-wrap-shop {
+  margin-top: 10px;
+}
+.midas-wrap {
+  background: #fff;
+  line-height: 1;
+}
+#aside-bottom .midas-wrap .title {
+  border: none;
+}
+.midas-wrap-shop .title {
+  padding-top: 10px;
+  border-bottom: 1px solid #ececec;
+}
+.midas-wrap .title {
+  position: relative;
+  margin-bottom: 0;
+}
+.midas-wrap .tip {
+  color: #999;
+  font-size: 12px;
+}
+.midas-wrap .fr {
+  float: right;
+}
+
+#aside-bottom .midas-wrap .title h4 {
+  font-size: 16px;
+  border: none;
+  padding-bottom: 10px;
+  font-weight: 700;
+}
+.midas-wrap-shop .title h4 {
+  float: left;
+  margin-bottom: -1px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f63;
+}
+.midas-wrap .title h4 {
+  color: #333;
+  font-size: 14px;
+}
+
+.midas-wrap-shop .mn-lr {
+  position: relative;
+  height: 69px;
+  margin-top: 15px;
+  padding-left: 100px;
+  zoom: 1;
+}
+.midas-wrap-shop .mn-lr .img-shop {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+a {
+  color: #282828;
+  cursor: pointer;
+}
+#aside-bottom .midas-wrap .J_con .item .tit {
+  font-size: 0;
+}
+.midas-wrap-shop .mn-lr .tit {
+  height: 14px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.midas-wrap-shop .mn-lr .info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #999;
+}
+.midas-wrap .fr {
+  float: right;
+}
+.midas-wrap-shop .mn-lr .img-shop img {
+  width: 93px;
+  height: 69px;
+}
+#J-shop-links,
+#J_view_about,
+#around-info,
+#aside .photos-container,
+#aside-bottom .aside-mod,
+#aside-bottom .midas-wrap,
+#basic-info,
+#comment,
+#friends-comment,
+#myreview-wrapper > div,
+#relevance-group,
+#sales,
+#shop-tabs,
+.shop-owner {
+  border: 1px solid #f0f0f0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+#body .mod {
+  margin-top: 10px;
+}
+.mod.aside-mod {
+  width: 270px;
+  _overflow: hidden;
+}
+#body .mod-title.single,
+#body .mod-title.single .item {
+  border-bottom: none;
+}
+#body .mod-title {
+  border-bottom: 1px solid #f0f0f0;
+}
+.body .mod .mod-title {
+  position: relative;
+  border-bottom: 1px solid #ebebeb;
+  _zoom: 1;
+}
+.mod.aside-mod .list {
+  margin-top: 15px;
+}
+.around-info .list .item {
+  position: relative;
+  padding-left: 103px;
+  margin-bottom: 10px;
+  height: 69px;
+  overflow: hidden;
+}
+#aside-bottom .around-info .pic,
+#aside-bottom .midas-wrap .J_con .item .img-shop {
+  border: 1px solid #f0f0f0;
+}
+
+.around-info .list .item .pic {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #eee;
+}
+.around-info .list .item img {
+  width: 93px;
+  height: 69px;
+  background-color: #eee;
+}
+body .body .body-content .aside .aside-mod .desc,
+body .body .body-content .aside .aside-mod .title {
+  _width: 137px;
+  _overflow: hidden;
+  margin-top: 15px;
+}
+.mod.aside-mod .title {
+  display: block;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  color: #999;
+}
+a {
+  text-decoration: none;
+}
+.around-info .list .item {
+  position: relative;
+  padding-left: 103px;
+  margin-bottom: 10px;
+  height: 69px;
+  overflow: hidden;
 }
 </style>

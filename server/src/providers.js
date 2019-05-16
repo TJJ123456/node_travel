@@ -67,6 +67,15 @@ async function createFoodType() {
   }
 }
 
+async function createEntertainmentType() {
+  for (let i in randomFoodType) {
+    const data = {
+      name: randomFoodType[i]
+    };
+    const newDoc = await EntertainmentTypes.insert(data);
+  }
+}
+
 async function createFood() {
   const typeList = await FoodTypes.find({});
   for (let i = 0; i < 40; ++i) {
@@ -84,6 +93,26 @@ async function createFood() {
       phone: phone
     };
     const newDoc = await Foods.insert(doc);
+  }
+}
+
+async function createEntertainment() {
+  const typeList = await EntertainmentTypes.find({});
+  for (let i = 0; i < 40; ++i) {
+    let name = randomFoodFirstname[randomIndex(randomFoodFirstname.length)] + randomFoodFamilyname[randomIndex(randomFoodFamilyname.length)];
+    let desc = randomDesc[randomIndex(randomDesc.length)];
+    let address = randomRoad[randomIndex(randomIndex.length)] + randomIndex(100) + '号';
+    let type = typeList[randomIndex(typeList.length)]._id;
+    let phone = randomIndex(1000);
+    const doc = {
+      name: name,
+      desc: desc,
+      address: address,
+      type: type,
+      filepath: '',
+      phone: phone
+    };
+    const newDoc = await Entertainments.insert(doc);
   }
 }
 
@@ -113,7 +142,7 @@ async function createCommentRandom() {
       let userid = userList[userIndex]._id;
       let itemIndex = randomIndex(foodList.length - 1);
       let itemid = foodList[itemIndex]._id;
-      let score = randomIndex(5);
+      let score = randomIndex(2) + 3;
       let average = randomIndex(200);
       let content = randomContent();
       let time = start - 86400000 * i + randomIndex(99999);
@@ -156,7 +185,7 @@ async function createCommentRandomEn() {
         score: score,
         average: average,
         content: content,
-        type: 0,
+        type: 1,
         itemid: itemid,
         userid: userid,
         commentType: 1,
@@ -169,9 +198,12 @@ async function createCommentRandomEn() {
 }
 
 async function initData() {
-  // await createFoodType();
-  // await createFood();
+  await createFoodType();
+  await createFood();
   await createCommentRandom();
+  await createEntertainmentType();
+  await createEntertainment();
+  await createCommentRandomEn();
 }
 
 // initData();

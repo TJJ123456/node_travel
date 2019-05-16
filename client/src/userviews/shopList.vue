@@ -88,7 +88,28 @@
             ></el-pagination>
           </div>
         </div>
-        <div class="aside">这里放广告</div>
+        <div class="aside">
+          <div class="J_midas-3">
+            <div class="midas-wrap midas-wrap-search">
+              <div class="clearfix">
+                <span class="tip fr">广告</span>
+                <h4>你可能会喜欢</h4>
+              </div>
+              <div class="J_con">
+                <div class="item">
+                  <ul class="mn">
+                    <li class="shop">
+                      <a class="img-shop">
+                        <img src="http://localhost:3000/public/img/default.jpg" alt>
+                      </a>
+                    </li>
+                    <li class="tit"><a href=""></a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div></div>
@@ -537,5 +558,67 @@ em {
   line-height: 28px;
   display: block;
   color: #999;
+}
+.J_midas-3 .midas-wrap-search {
+  width: 188px;
+  padding: 15px 20px 0 20px;
+}
+.midas-wrap-search {
+  width: 148px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  padding: 15px 15px 0;
+  border: 1px solid #e9e9e9;
+}
+.midas-wrap {
+  background: #fff;
+  line-height: 1;
+}
+.J_midas-3 .midas-wrap-search .title .tip {
+  color: #e5e5e5;
+  border: 1px solid #e5e5e5;
+  padding: 1px 3px;
+}
+.midas-wrap .title .tip {
+  color: #999;
+}
+.midas-wrap .fr {
+  float: right;
+}
+.midas-wrap .title h4 {
+  color: #333;
+  font-size: 14px;
+}
+.J_midas-3 .midas-wrap-search .J_con {
+  width: 100%;
+}
+.J_midas-3 .midas-wrap-search .J_con .item {
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  padding-left: 10px;
+  margin-top: 20px;
+}
+.midas-wrap-search .item {
+  padding-bottom: 20px;
+}
+.midas-wrap-search .mn .shop {
+  margin-top: 0;
+}
+.J_midas-3 .midas-wrap-search .J_con .item .mn .shop .img-shop {
+  width: 172px;
+  height: auto;
+}
+
+.midas-wrap-search .mn .img-shop {
+  display: block;
+  position: relative;
+  width: 148px;
+  height: 84px;
+  overflow: hidden;
+}
+.J_midas-3 .midas-wrap-search .J_con .item .mn .shop .img-shop img {
+  width: 170px;
+  height: 127px;
+  border: 1px solid #f0f0f0;
 }
 </style>

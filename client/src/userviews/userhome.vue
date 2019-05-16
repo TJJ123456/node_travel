@@ -72,6 +72,29 @@
             </div>
           </div>
         </div>
+        <div id="travel-scene-cata" class="last-four-cata cata-poi">
+          <div class="top-bar clearfix">
+            <div class="title-text">旅游景点</div>
+            <div class="operation">
+              <a class="all">全部</a>
+            </div>
+          </div>
+          <div class="bottom-list scene-list">
+            <ul class="clearfix">
+              <li class="list-item">
+                <div class="item">
+                  <a class="shop-item-pic">
+                    <img src="http://localhost:3000/public/img/default.jpg">
+                    <div class="pic-overlay"></div>
+                  </a>
+                  <div class="scene_desc">
+                    <a class="shop-name">xxx景区</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -391,5 +414,124 @@ img {
   color: #999;
   margin-top: 5px;
   display: inline-block;
+}
+
+.last-four-cata {
+  position: relative;
+  margin: 30px auto 0;
+  width: 1190px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.last-four-cata .top-bar {
+  height: 30px;
+  padding-left: 20px;
+  position: relative;
+  padding-right: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 0;
+}
+.last-four-cata .top-bar .cata-tag,
+.last-four-cata .top-bar .title-text {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  white-space: nowrap;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.last-four-cata .top-bar .title-text {
+  height: 30px;
+  line-height: 30px;
+  font-size: 20px;
+  margin-left: 40px;
+}
+
+.last-four-cata .top-bar .operation {
+  position: absolute;
+  right: 19px;
+  top: 9px;
+  font-size: 14px;
+  cursor: pointer;
+  width: 37px;
+}
+.last-four-cata .top-bar .operation,
+.last-four-cata .top-bar .operation .all .more-desc {
+  height: 14px;
+  line-height: 14px;
+  display: inline-block;
+}
+.last-four-cata .top-bar .operation .all {
+  font-size: 12px;
+  color: #333;
+  display: inline-block;
+  width: 100%;
+  position: relative;
+}
+.last-four-cata .scene-list {
+  max-height: 548px;
+  font-size: 0;
+}
+.last-four-cata .bottom-list {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.last-four-cata .scene-list .list-item {
+  width: 370px;
+  height: 240px;
+  float: left;
+  margin: 0 0 34px 20px;
+}
+.last-four-cata .scene-list .list-item .item {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.last-four-cata .scene-list .list-item .item .shop-item-pic {
+  width: 100%;
+  height: 208px;
+  display: block;
+}
+.shop-item-pic {
+  position: relative;
+}
+.last-four-cata .scene-list .list-item .item .shop-item-pic > img {
+  width: 100%;
+  height: 100%;
+}
+.shop-item-pic .pic-overlay {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: hsla(0, 0%, 100%, 0.2);
+}
+.last-four-cata .scene-list .list-item .item .scene_desc {
+  width: 100%;
+  margin: 10px 0 0;
+  font-size: 16px;
+  color: #222;
+  text-align: left;
+  max-width: 100%;
+  white-space: nowrap;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.last-four-cata .scene-list .list-item .item .scene_desc a {
+  width: 100%;
+  height: 100%;
+  color: #222;
+  max-width: 100%;
+  white-space: nowrap;
+  word-wrap: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
