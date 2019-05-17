@@ -1,4 +1,4 @@
-import { Comments, Users, Foods, Entertainments, Spots } from '../providers'
+import { Datas, DataTypes, Comments, Users } from '../providers'
 import express from 'express'
 const route = express.Router();
 
@@ -28,7 +28,6 @@ route.post('/create', async (req, res, next) => {
             score: req.body.score,
             average: req.body.average,
             content: req.body.content,
-            type: req.body.type,
             itemid: req.body.itemid,
             userid: req.session.user._id,
             commentType: commentType.Wait,
@@ -65,21 +64,10 @@ route.get('/list', async (req, res, next) => {
             } else {
                 data[i].username = '用户不存在';
             }
-            switch (data[i].type) {
-                case Comment.Food:
-                    let food = await Foods.findOne({ _id: data[i].itemid });
-                    if (food) data[i].shopname = food.name;
-                    else data[i].shopname = '美食不存在'
-                    break;
-                case Comment.Entertainment:
-                    data[i].shopname = (await Entertainments.findOne({ _id: data[i].itemid })).name;
-                    break;
-                case Comment.Spot:
-                    let spot = await Spots.findOne({ _id: data[i].itemid });
-                    if (spot) data[i].shopname = spot.name;
-                    else data[i].shopname = '景点不存在'
-                    break;
-            }
+            let doc = await Datas.findOne({ _id: data[i].itemid });
+            if (doc) data[i].shopname = doc.name;
+            else data[i].shopname = '美食不存在';
+
         }
         res.json({
             data: data
@@ -100,28 +88,23 @@ route.get('/passlist', async (req, res, next) => {
             } else {
                 data[i].username = '用户不存在';
             }
-            switch (data[i].type) {
-                case Comment.Food:
-                    data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
-                    break;
-                case Comment.Entertainment:
-                    data[i].shopname = (await Entertainments.findOne({ _id: data[i].itemid })).name;
-                    break;
-            }
+            let doc = await Datas.findOne({ _id: data[i].itemid });
+            if (doc) data[i].shopname = doc.name;
+            else data[i].shopname = '美食不存在';
         }
         res.json({
             data: data
         });
     } catch (e) {
+        console.log(e.message);
         res.status(405).send(e.message);
     }
 })
 
 route.post('/itemlist', async (req, res, next) => {
-    const type = req.body.type;
     const id = req.body.id;
     try {
-        let data = await Comments.find({ type: type, itemid: id, commentType: commentType.Pass });
+        let data = await Comments.find({ itemid: id, commentType: commentType.Pass });
         for (let i in data) {
             let user = await Users.findOne({ _id: data[i].userid });
             if (user) {
@@ -151,23 +134,9 @@ route.get('/userlist', async (req, res, next) => {
             } else {
                 data[i].username = '用户不存在';
             }
-            switch (data[i].type) {
-                case Comment.Food:
-                    let food = await Foods.findOne({ _id: data[i].itemid });
-                    data[i].shopname = food.name;
-                    data[i].shopaddress = food.address;
-                    break;
-                case Comment.Entertainment:
-                    let shop = await Entertainments.findOne({ _id: data[i].itemid });
-                    data[i].shopname = shop.name;
-                    data[i].shopaddress = shop.address;
-                    break;
-                case Comment.Spot:
-                    let spot = await Spots.findOne({ _id: data[i].itemid });
-                    data[i].shopname = spot.name;
-                    data[i].shopaddress = spot.address;
-                    break;
-            }
+            let doc = await Datas.findOne({ _id: data[i].itemid });
+            if (doc) data[i].shopname = doc.name;
+            else data[i].shopname = '美食不存在';
         }
         res.json({
             data: data
@@ -188,19 +157,9 @@ route.get('/checklist', async (req, res, next) => {
             } else {
                 data[i].username = '用户不存在';
             }
-            switch (data[i].type) {
-                case Comment.Food:
-                    data[i].shopname = (await Foods.findOne({ _id: data[i].itemid })).name;
-                    break;
-                case Comment.Entertainment:
-                    let shop = await Entertainments.findOne({ _id: data[i].itemid });
-                    data[i].shopname = shop.name;
-                    break;
-                case Comment.Spot:
-                    let spot = await Spots.findOne({ _id: data[i].itemid });
-                    data[i].shopname = spot.name;
-                    break;
-            }
+            let doc = await Datas.findOne({ _id: data[i].itemid });
+            if (doc) data[i].shopname = doc.name;
+            else data[i].shopname = '美食不存在';
         }
         res.json({
             data: data
@@ -233,7 +192,6 @@ route.post('/change', async (req, res, next) => {
 route.post('/pass', async (req, res, next) => {
     const id = req.body.id;
     try {
-        console.log('审核一次', id);
         let data = await Comments.updateOne({ _id: id }, { $set: { 'commentType': commentType.Pass } });
         res.json({ status: 'ok' })
     } catch (e) {

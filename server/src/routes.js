@@ -1,11 +1,12 @@
-import foodRoute from './routes/foodRoute';
-import hotelRoute from './routes/hotelRoute';
-import spotRoute from './routes/spotRoute';
-import planRoute from './routes/planRoute';
+// import foodRoute from './routes/foodRoute';
+// import hotelRoute from './routes/hotelRoute';
+// import spotRoute from './routes/spotRoute';
+import dataRoute from './routes/dataRoute';
+// import planRoute from './routes/planRoute';
 import userRoute from './routes/userRoute';
 import commentRoute from './routes/commentsRoute';
 import postRoute from './routes/postRoute';
-import entertainmentRoute from './routes/entertainmentRoute';
+// import entertainmentRoute from './routes/entertainmentRoute';
 import searchRoute from './routes/searchRoute';
 
 function privateRoute(req, res, next) {
@@ -23,14 +24,15 @@ function sendManagerInfo(req, res) {
 }
 
 export default function (app) {
-  app.use('/food', foodRoute);
-  app.use('/hotel', hotelRoute);
-  app.use('/spot', spotRoute);
-  app.use('/plan', planRoute);
+  // app.use('/food', foodRoute);
+  app.use('/data', dataRoute);
+  // app.use('/hotel', hotelRoute);
+  // app.use('/spot', spotRoute);
+  // app.use('/plan', planRoute);
   app.use('/user', userRoute);
   app.use('/comment', commentRoute);
   app.use('/posts', postRoute);
-  app.use('/entertainment', entertainmentRoute);
+  // app.use('/entertainment', entertainmentRoute);
   app.use('/search', searchRoute);
 
   app.get('/manager1', (req, res) => {

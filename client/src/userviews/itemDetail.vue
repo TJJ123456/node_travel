@@ -147,7 +147,7 @@ export default {
         score: null,
         average: null,
         content: null,
-        type: parseInt(this.type),
+        // type: parseInt(this.type),
         itemid: this.id
       }
     };
@@ -173,37 +173,18 @@ export default {
   // },
   methods: {
     async initData() {
-      switch (parseInt(this.type)) {
-        case 0:
-          this.item = (await this.$fetch("food/getfood", {
-            method: "POST",
-            body: JSON.stringify({
-              id: this.id
-            })
-          })).data;
-          break;
-        case 1:
-          this.item = (await this.$fetch("entertainment/get", {
-            method: "POST",
-            body: JSON.stringify({
-              id: this.id
-            })
-          })).data;
-          break;
-        case 2:
-          this.item = (await this.$fetch("spot/get", {
-            method: "POST",
-            body: JSON.stringify({
-              id: this.id
-            })
-          })).data;
-          break;
-      }
+      let item = await this.$fetch("data/get", {
+        method: "POST",
+        body: JSON.stringify({
+          id: this.id,
+          kind: parseInt(this.type)
+        })
+      });
+      this.item = item.data;
       let list = await this.$fetch("comment/itemlist", {
         method: "POST",
         body: JSON.stringify({
           id: this.id,
-          type: parseInt(this.type)
         })
       });
       this.commentList = list.data;

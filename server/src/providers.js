@@ -7,20 +7,28 @@ const idIndex = {
 
 export const Users = modelFactory(collectionFactory('users', idIndex))
 
-export const Foods = modelFactory(collectionFactory('foods', idIndex))
-export const FoodTypes = modelFactory(collectionFactory('foodTypes', idIndex))
+export const Datas = modelFactory(collectionFactory('datas', idIndex))
+export const DataTypes = modelFactory(collectionFactory('dataTypes', idIndex))
 
-export const Entertainments = modelFactory(collectionFactory('entertainments', idIndex))
-export const EntertainmentTypes = modelFactory(collectionFactory('entertainmentTypes', idIndex))
+// export const Foods = modelFactory(collectionFactory('foods', idIndex))
+// export const FoodTypes = modelFactory(collectionFactory('foodTypes', idIndex))
 
-export const Spots = modelFactory(collectionFactory('spots', idIndex))
-export const SpotTypes = modelFactory(collectionFactory('spottypes', idIndex))
-export const Plans = modelFactory(collectionFactory('plans', idIndex))
+// export const Entertainments = modelFactory(collectionFactory('entertainments', idIndex))
+// export const EntertainmentTypes = modelFactory(collectionFactory('entertainmentTypes', idIndex))
+
+// export const Spots = modelFactory(collectionFactory('spots', idIndex))
+// export const SpotTypes = modelFactory(collectionFactory('spottypes', idIndex))
+// export const Plans = modelFactory(collectionFactory('plans', idIndex))
 export const Comments = modelFactory(collectionFactory('comments', idIndex))
 
-const randomFoodType = ['下午茶', '早餐', '午餐', '夜宵', '特色小吃', '便当', '火锅'];
-const randomEntertainmentType = ['酒吧', 'KTV', '游戏厅', '按摩推拿'];
-const randomSpotType = ['公园', '名胜', '古迹', '游乐场'];
+const randomDataType = [
+  ['下午茶', '早餐', '午餐', '夜宵', '特色小吃', '便当', '火锅'],
+  ['酒吧', 'KTV', '游戏厅', '按摩推拿'],
+  ['公园', '名胜', '古迹', '游乐场'],
+]
+// const randomFoodType = ['下午茶', '早餐', '午餐', '夜宵', '特色小吃', '便当', '火锅'];
+// const randomEntertainmentType = ['酒吧', 'KTV', '游戏厅', '按摩推拿'];
+// const randomSpotType = ['公园', '名胜', '古迹', '游乐场'];
 const randomDesc = [
   `明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间？(何似 一作：何时；又恐 一作：惟 / 唯恐)
   转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。(长向 一作：偏向)`,
@@ -47,225 +55,115 @@ const randomRoad = [
   '十月初五马路',
 ]
 
-const randomFoodFirstname = [
-  '马大姐', '张大哥', '光头佬', '十三哥', '少林寺', '木村', '秋林', '魔幻', '五彩', '妙香', '三宝',
-  '香榭丽舍', '天使之语', '田园牧歌', '淘气猫', '特香', '开口乐', '味雅园', '大快乐', '胜达', '好百客'
+const randomDataFirstname = [
+  [
+    '马大姐', '张大哥', '光头佬', '十三哥', '少林寺', '木村', '秋林', '魔幻', '五彩', '妙香', '三宝',
+    '香榭丽舍', '天使之语', '田园牧歌', '淘气猫', '特香', '开口乐', '味雅园', '大快乐', '胜达', '好百客'
+  ],
+  [
+    '锦鲤', '喜鹊音乐', '工藤', '日光纪', '晴天', '八度空间', '吉木', '芊羽芊寻', '可可派', '派工仿',
+    '琥珀', '创意', '红河谷', '味典', '世界之窗', '氧气', '美之道', '爱麦克', '哥巢',
+  ],
+  [
+    '桂林圆环', '象山', '希宇', '兴安', '桂林漓江', '红溪', '逍遥楼', '卡乐', '尚水', '葡萄山', '乐满地', '香草', '虞山',
+  ],
 ]
 
-const randomFoodFamilyname = [
-  '桂林米粉', '螺蛳粉', '饺子', '炒饭', '小吃', '烘培', '烧烤', '面包', '早餐', '奶茶', '蛋糕', '快餐',
-  '自助', '西餐厅', '中餐', '日料', '老友粉', '餐厅', '酒店', '饭店'
+const randomDatafamilyname = [
+  [
+    '桂林米粉', '螺蛳粉', '饺子', '炒饭', '小吃', '烘培', '烧烤', '面包', '早餐', '奶茶', '蛋糕', '快餐',
+    '自助', '西餐厅', '中餐', '日料', '老友粉', '餐厅', '酒店', '饭店'
+  ],
+  [
+    '酒吧', '酒馆', '剧本体验馆', '创意手工坊', '密室逃脱', '手作', 'KTV', 'NPC密室', '野战俱乐部', '电玩城', '轰趴馆',
+    '水疗', '清吧', '养生堂', '推拿', '休闲会所', '康复馆',
+  ],
+  [
+    '水上乐园', '主题公园', '古镇', '景区', '欢乐城', '广场', '温泉', '遗址公园', '观光古寨', '逍遥湖', '度假区',
+    '画廊', '星球', '漂流', '动物园',
+  ]
 ]
 
-const randomEnFirstname = [
-  '锦鲤',
-  '喜鹊音乐',
-  '工藤',
-  '日光纪',
-  '晴天',
-  '八度空间',
-  '吉木',
-  '芊羽芊寻',
-  '可可派',
-  '派工仿',
-  '琥珀',
-  '创意',
-  '红河谷',
-  '味典',
-  '世界之窗',
-  '氧气',
-  '美之道',
-  '爱麦克',
-  '哥巢',
-]
-
-const randomEnFamilyname = [
-  '酒吧',
-  '酒馆',
-  '剧本体验馆',
-  '创意手工坊',
-  '密室逃脱',
-  '手作',
-  'KTV',
-  'NPC密室',
-  '野战俱乐部',
-  '电玩城',
-  '轰趴馆',
-  '水疗',
-  '清吧',
-  '养生堂',
-  '推拿',
-  '休闲会所',
-  '康复馆',
-]
-
-const randomSpotFirstname = [
-  '桂林圆环',
-  '象山',
-  '希宇',
-  '兴安',
-  '桂林漓江',
-  '红溪',
-  '逍遥楼',
-  '卡乐',
-  '尚水',
-  '葡萄山',
-  '乐满地',
-  '香草',
-  '虞山',
-]
-
-const randomSpotfamilyname = [
-  '水上乐园',
-  '主题公园',
-  '古镇',
-  '景区',
-  '欢乐城',
-  '广场',
-  '温泉',
-  '遗址公园',
-  '观光古寨',
-  '逍遥湖',
-  '度假区',
-  '画廊',
-  '星球',
-  '漂流',
-  '动物园',
-]
-
-const foodImg = [
-  '/public/food/1.jpg',
-  '/public/food/2.jpg',
-  '/public/food/3.jpg',
-  '/public/food/4.jpg',
-  '/public/food/5.jpg',
-  '/public/food/6.jpg',
-  '/public/food/7.jpg',
-  '/public/food/8.jpg',
-  '/public/food/9.jpg',
-  '/public/food/10.jpg',
-  '/public/food/11.jpg',
-]
-
-const enImg = [
-  '/public/entertainment/1.png',
-  '/public/entertainment/2.png',
-  '/public/entertainment/3.png',
-  '/public/entertainment/4.png',
-  '/public/entertainment/5.png',
-  '/public/entertainment/6.png',
-  '/public/entertainment/7.png',
-  '/public/entertainment/8.png',
-  '/public/entertainment/9.png',
-  '/public/entertainment/10.png',
-  '/public/entertainment/11.png',
-]
-
-const spotImg = [
-  '/public/spot/1.jpg',
-  '/public/spot/2.jpg',
-  '/public/spot/3.jpg',
-  '/public/spot/4.jpg',
-  '/public/spot/5.jpg',
-  '/public/spot/6.jpg',
-  '/public/spot/7.jpg',
-  '/public/spot/8.jpg',
-  '/public/spot/9.jpg',
-  '/public/spot/10.jpg',
-  '/public/spot/11.jpg',
+const dataImg = [
+  [
+    '/public/food/1.jpg',
+    '/public/food/2.jpg',
+    '/public/food/3.jpg',
+    '/public/food/4.jpg',
+    '/public/food/5.jpg',
+    '/public/food/6.jpg',
+    '/public/food/7.jpg',
+    '/public/food/8.jpg',
+    '/public/food/9.jpg',
+    '/public/food/10.jpg',
+    '/public/food/11.jpg',
+  ], [
+    '/public/entertainment/1.png',
+    '/public/entertainment/2.png',
+    '/public/entertainment/3.png',
+    '/public/entertainment/4.png',
+    '/public/entertainment/5.png',
+    '/public/entertainment/6.png',
+    '/public/entertainment/7.png',
+    '/public/entertainment/8.png',
+    '/public/entertainment/9.png',
+    '/public/entertainment/10.png',
+    '/public/entertainment/11.png',
+  ],
+  [
+    '/public/spot/1.jpg',
+    '/public/spot/2.jpg',
+    '/public/spot/3.jpg',
+    '/public/spot/4.jpg',
+    '/public/spot/5.jpg',
+    '/public/spot/6.jpg',
+    '/public/spot/7.jpg',
+    '/public/spot/8.jpg',
+    '/public/spot/9.jpg',
+    '/public/spot/10.jpg',
+    '/public/spot/11.jpg',
+  ]
 ]
 
 function randomIndex(count) {
   return Math.round(Math.random() * (count - 1));
 }
 
-async function createFoodType() {
-  for (let i in randomFoodType) {
-    const data = {
-      name: randomFoodType[i]
-    };
-    const newDoc = await FoodTypes.insert(data);
+async function createDataType() {
+  for (let i = 0; i < randomDataType.length; ++i) {
+    const arr = randomDataType[i];
+    console.log(arr);
+    for (let j = 0; j < arr.length; ++j) {
+      const doc = {
+        name: arr[j],
+        kind: i
+      };
+      const newDoc = await DataTypes.insert(doc);
+    }
   }
 }
 
-async function createEntertainmentType() {
-  for (let i in randomEntertainmentType) {
-    const data = {
-      name: randomEntertainmentType[i]
-    };
-    const newDoc = await EntertainmentTypes.insert(data);
-  }
-}
-
-async function createSpotType() {
-  for (let i in randomSpotType) {
-    const data = {
-      name: randomSpotType[i]
-    };
-    const newDoc = await SpotTypes.insert(data);
-  }
-}
-
-async function createFood() {
-  const typeList = await FoodTypes.find({});
-  for (let i = 0; i < 40; ++i) {
-    let name = randomFoodFirstname[randomIndex(randomFoodFirstname.length)] + randomFoodFamilyname[randomIndex(randomFoodFamilyname.length)];
-    let desc = randomDesc[randomIndex(randomDesc.length)];
-    let address = randomRoad[randomIndex(randomIndex.length)] + randomIndex(100) + '号';
-    let type = typeList[randomIndex(typeList.length)]._id;
-    let phone = randomIndex(1000);
-    let filepath = foodImg[randomIndex(foodImg.length)];
-    const doc = {
-      name: name,
-      desc: desc,
-      address: address,
-      type: type,
-      filepath: filepath,
-      phone: phone
-    };
-    const newDoc = await Foods.insert(doc);
-  }
-}
-
-async function createEntertainment() {
-  const typeList = await EntertainmentTypes.find({});
-  for (let i = 0; i < 40; ++i) {
-    let name = randomEnFirstname[randomIndex(randomEnFirstname.length)] + randomEnFamilyname[randomIndex(randomEnFamilyname.length)];
-    let desc = randomDesc[randomIndex(randomDesc.length)];
-    let address = randomRoad[randomIndex(randomIndex.length)] + randomIndex(100) + '号';
-    let type = typeList[randomIndex(typeList.length)]._id;
-    let phone = randomIndex(1000);
-    let filepath = enImg[randomIndex(enImg.length)];
-    const doc = {
-      name: name,
-      desc: desc,
-      address: address,
-      type: type,
-      filepath: filepath,
-      phone: phone
-    };
-    const newDoc = await Entertainments.insert(doc);
-  }
-}
-
-async function createSpot() {
-  const typeList = await SpotTypes.find({});
-  for (let i = 0; i < 40; ++i) {
-    let name = randomSpotFirstname[randomIndex(randomSpotFirstname.length)] + randomSpotfamilyname[randomIndex(randomSpotfamilyname.length)];
-    let desc = randomDesc[randomIndex(randomDesc.length)];
-    let address = randomRoad[randomIndex(randomIndex.length)] + randomIndex(100) + '号';
-    let type = typeList[randomIndex(typeList.length)]._id;
-    let phone = randomIndex(1000);
-    let filepath = spotImg[randomIndex(spotImg.length)];
-    const doc = {
-      name: name,
-      desc: desc,
-      address: address,
-      type: type,
-      filepath: filepath,
-      phone: phone
-    };
-    const newDoc = await Spots.insert(doc);
+async function createData() {
+  for (let i = 0; i < 3; ++i) {
+    const typeList = await DataTypes.find({ kind: i });
+    for (let j = 0; j < 40; ++j) {
+      let name = randomDataFirstname[i][randomIndex(randomDataFirstname[i].length)] + randomDatafamilyname[i][randomIndex(randomDatafamilyname[i].length)];
+      let desc = randomDesc[randomIndex(randomDesc.length)];
+      let address = randomRoad[randomIndex(randomIndex.length)] + randomIndex(100) + '号';
+      let type = typeList[randomIndex(typeList.length)]._id;
+      let phone = randomIndex(1000);
+      let filepath = dataImg[i][randomIndex(dataImg[i].length)];
+      const doc = {
+        name: name,
+        desc: desc,
+        address: address,
+        type: type,
+        filepath: filepath,
+        phone: phone,
+        kind: i
+      };
+      const newDoc = await Datas.insert(doc);
+    }
   }
 }
 
@@ -302,9 +200,9 @@ function randomContent() {
 
 async function createCommentRandom() {
   const start = new Date(new Date().toLocaleDateString()).getTime();
-  const foodList = await Foods.find({});
+  const dataList = await Datas.find({});
   const userList = await Users.find({});
-  if (foodList.length === 0 || userList.length === 0) {
+  if (dataList.length === 0 || userList.length === 0) {
     return;
   }
 
@@ -313,8 +211,8 @@ async function createCommentRandom() {
     for (let j = 0; j < count; ++j) {
       let userIndex = randomIndex(userList.length - 1);
       let userid = userList[userIndex]._id;
-      let itemIndex = randomIndex(foodList.length - 1);
-      let itemid = foodList[itemIndex]._id;
+      let itemIndex = randomIndex(dataList.length - 1);
+      let itemid = dataList[itemIndex]._id;
       let score = randomIndex(2) + 3;
       let average = randomIndex(200);
       let content = randomContent();
@@ -323,75 +221,6 @@ async function createCommentRandom() {
         score: score,
         average: average,
         content: content,
-        type: 0,
-        itemid: itemid,
-        userid: userid,
-        commentType: 1,
-        createTime: time,
-      }
-      const newDoc = await Comments.insert(data);
-    }
-  }
-}
-
-async function createCommentRandomEn() {
-  const start = new Date(new Date().toLocaleDateString()).getTime();
-  const foodList = await Entertainments.find({});
-  const userList = await Users.find({});
-  if (foodList.length === 0 || userList.length === 0) {
-    return;
-  }
-
-  for (let i = 6; i > -1; i--) {
-    let count = Math.round(Math.random() * 20);
-    for (let j = 0; j < count; ++j) {
-      let userIndex = randomIndex(userList.length - 1);
-      let userid = userList[userIndex]._id;
-      let itemIndex = randomIndex(foodList.length - 1);
-      let itemid = foodList[itemIndex]._id;
-      let score = randomIndex(5);
-      let average = randomIndex(200);
-      let content = randomContent();
-      let time = start - 86400000 * i + randomIndex(99999);
-      const data = {
-        score: score,
-        average: average,
-        content: content,
-        type: 1,
-        itemid: itemid,
-        userid: userid,
-        commentType: 1,
-        createTime: time,
-      }
-      const newDoc = await Comments.insert(data);
-    }
-  }
-}
-
-async function createCommentRandomSpot() {
-  const start = new Date(new Date().toLocaleDateString()).getTime();
-  const foodList = await Spots.find({});
-  const userList = await Users.find({});
-  if (foodList.length === 0 || userList.length === 0) {
-    return;
-  }
-
-  for (let i = 6; i > -1; i--) {
-    let count = Math.round(Math.random() * 20);
-    for (let j = 0; j < count; ++j) {
-      let userIndex = randomIndex(userList.length - 1);
-      let userid = userList[userIndex]._id;
-      let itemIndex = randomIndex(foodList.length - 1);
-      let itemid = foodList[itemIndex]._id;
-      let score = randomIndex(5);
-      let average = randomIndex(200);
-      let content = randomContent();
-      let time = start - 86400000 * i + randomIndex(99999);
-      const data = {
-        score: score,
-        average: average,
-        content: content,
-        type: 2,
         itemid: itemid,
         userid: userid,
         commentType: 1,
@@ -403,15 +232,9 @@ async function createCommentRandomSpot() {
 }
 
 async function initData() {
-  await createFoodType();
-  await createFood();
+  // await createDataType();
+  await createData();
   await createCommentRandom();
-  await createEntertainmentType();
-  await createEntertainment();
-  await createCommentRandomEn();
-  await createSpotType();
-  await createSpot();
-  await createCommentRandomSpot();
 }
 
 // initData();

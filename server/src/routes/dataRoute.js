@@ -15,7 +15,6 @@ DataKind.Spot = 2;
 route.post('/create', async (req, res, next) => {
     try {
         const item = await Datas.findOne({ kind: req.body.kind, name: req.body.name });
-        // console.log(food);
         if (item) {
             throw new Error('已有同名的商家');
         }
@@ -89,38 +88,36 @@ route.get('/typecount', async (req, res, next) => {
     }
 })
 
-// route.post('/list', async (req, res, next) => {
-//     const limit = req.body.limit;
-//     const offset = req.body.offset;
-//     try {
-//         let data = await Datas.find({}, { limit: limit, skip: offset });
-//         for (let i in data) {
-//             data[i].typename = (await FoodTypes.findOne({ _id: data[i].type })).name;
-//         }
-//         res.json({
-//             data: data
-//         });
-//     } catch (e) {
-//         console.log(e.message);
-//         res.status(405).send(e.message);
-//     }
-// })
+route.post('/list', async (req, res, next) => {
+    const kind = req.body.kind;
+    try {
+        let data = await Datas.find({ kind: kind }, {});
+        for (let i in data) {
+            data[i].typename = (await DataTypes.findOne({ _id: data[i].type })).name;
+        }
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        console.log(e.message);
+        res.status(405).send(e.message);
+    }
+})
 
-// route.post('/foodtypelist', async (req, res, next) => {
-//     const limit = req.body.limit;
-//     const offset = req.body.offset;
-//     try {
-//         let data = await FoodTypes.find({}, { limit: limit, skip: offset });
-//         for (let i in data) {
-//             data[i].foodcount = await Foods.count({ type: data[i]._id });
-//         }
-//         res.json({
-//             data: data
-//         });
-//     } catch (e) {
-//         res.status(405).send(e.message);
-//     }
-// })
+route.post('/typelist', async (req, res, next) => {
+    const kind = req.body.kind;
+    try {
+        let data = await DataTypes.find({kind: kind}, {});
+        for (let i in data) {
+            data[i].count = await Datas.count({ type: data[i]._id });
+        }
+        res.json({
+            data: data
+        });
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
 
 route.get('/list', async (req, res, next) => {
     try {
@@ -130,11 +127,11 @@ route.get('/list', async (req, res, next) => {
             data[i].typename = type.name;
             data[i].commentCount = await Comments.count({ itemid: data[i]._id });
         }
-
         res.json({
             data: data
         });
     } catch (e) {
+        console.log(e.message);
         res.status(405).send(e.message);
     }
 })

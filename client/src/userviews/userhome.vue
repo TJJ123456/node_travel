@@ -107,37 +107,30 @@ export default {
       foodlist: [],
       commentList: [],
       entertainmentList: [],
-      spotList: []
+      spotList: [],
+      dataList: []
     };
   },
-  created() {
-    this.initData();
-  },
+  computed: {},
+  // created() {
+  //   this.initData();
+  // },
   activated() {
     this.initData();
   },
   methods: {
     async initData() {
-      let data = await this.$fetch("food/foodlist");
-      let spot = await this.$fetch("spot/list");
+      let data = await this.$fetch("data/list");
       let comment = await this.$fetch("comment/passlist");
-      let entertainment = await this.$fetch("entertainment/list");
-      this.foodlist = data.data;
+      this.dataList = data.data;
       this.commentList = comment.data;
-      this.entertainmentList = entertainment.data;
-      this.spotList = spot.data;
-      this.foodlist.forEach(item => {
+      this.dataList.forEach(item => {
         item.score = parseFloat(this.getScore(item._id)) || 0;
         item.avg = parseFloat(this.getaverage(item._id)) || 0;
       });
-      this.entertainmentList.forEach(item => {
-        item.score = parseFloat(this.getScore(item._id)) || 0;
-        item.avg = parseFloat(this.getaverage(item._id)) || 0;
-      });
-      this.spotList.forEach(item => {
-        item.score = parseFloat(this.getScore(item._id)) || 0;
-        item.avg = parseFloat(this.getaverage(item._id)) || 0;
-      });
+      this.foodlist = this.dataList.filter(item => item.kind === 0);
+      this.entertainmentList = this.dataList.filter(item => item.kind === 1);
+      this.spotList = this.dataList.filter(item => item.kind === 2);
     },
     showlist(type) {
       if (type === 0) {

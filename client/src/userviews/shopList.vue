@@ -103,7 +103,9 @@
                         <img src="http://localhost:3000/public/img/default.jpg" alt>
                       </a>
                     </li>
-                    <li class="tit"><a href=""></a></li>
+                    <li class="tit">
+                      <a href></a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -189,22 +191,21 @@ export default {
     async initData() {
       let data = [];
       let type = [];
-      switch (parseInt(this.type)) {
-        case 0:
-          data = await this.$fetch("food/foodlist");
-          this.shoplist = data.data;
-          type = await this.$fetch("food/foodtypelist");
-          this.typelist = type.data;
-          break;
-        case 1:
-          data = await this.$fetch("entertainment/list");
-          this.shoplist = data.data;
-          type = await this.$fetch("entertainment/typelist");
-          this.typelist = type.data;
-          break;
-        case 2:
-          break;
-      }
+      data = await this.$fetch("data/list", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: parseInt(this.type)
+        })
+      });
+      this.shoplist = data.data;
+      type = await this.$fetch("data/typelist", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: parseInt(this.type)
+        })
+      });
+      this.typelist = type.data;
+
       let list = await this.$fetch("comment/passlist");
       this.commentList = list.data;
       this.commentList.forEach(item => {

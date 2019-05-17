@@ -55,7 +55,7 @@ export default {
         score: 0,
         average: "",
         content: "",
-        type: parseInt(this.type),
+        // type: parseInt(this.type),
         itemid: this.id
       },
       rules: {
