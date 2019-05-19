@@ -55,7 +55,7 @@ route.get('/count', async (req, res, next) => {
 
 route.get('/list', async (req, res, next) => {
     try {
-        let data = await Comments.find({});
+        let data = await Comments.find({}, { sort: {createTime : -1} });
         for (let i in data) {
             // data[i].username = (await Users.findOne({ _id: data[i].userid })).username;
             let user = await Users.findOne({ _id: data[i].userid });
@@ -107,7 +107,7 @@ route.get('/passlist', async (req, res, next) => {
 route.post('/itemlist', async (req, res, next) => {
     const id = req.body.id;
     try {
-        let data = await Comments.find({ itemid: id, commentType: commentType.Pass });
+        let data = await Comments.find({ itemid: id, commentType: commentType.Pass }, { sort: {createTime : -1} });
         for (let i in data) {
             let user = await Users.findOne({ _id: data[i].userid });
             if (user) {
@@ -120,6 +120,7 @@ route.post('/itemlist', async (req, res, next) => {
             data: data
         });
     } catch (e) {
+        console.log(e.message);
         res.status(405).send(e.message);
     }
 })
@@ -129,7 +130,7 @@ route.get('/userlist', async (req, res, next) => {
         if (!req.session.user) {
             throw new Error('请登录');
         }
-        let data = await Comments.find({ userid: req.session.user._id });
+        let data = await Comments.find({ userid: req.session.user._id }, { sort: {createTime : -1} });
         for (let i in data) {
             let user = await Users.findOne({ _id: data[i].userid });
             if (user) {
@@ -152,7 +153,7 @@ route.get('/userlist', async (req, res, next) => {
 
 route.get('/checklist', async (req, res, next) => {
     try {
-        let data = await Comments.find({ commentType: commentType.Wait });
+        let data = await Comments.find({ commentType: commentType.Wait }, { sort: {createTime : -1} });
         for (let i in data) {
             let user = await Users.findOne({ _id: data[i].userid });
             if (user) {
