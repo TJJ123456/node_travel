@@ -22,7 +22,7 @@
         ></el-pagination>
       </div>
       <el-dialog title="审核评论" :visible.sync="dialogFormVisible">
-        <el-form :rules="dialogFormrules" :model="dialogForm" ref="dialogForm">
+        <el-form :model="dialogForm" ref="dialogForm">
           <div>
             <span>商家名称：{{dialogForm.shopname}}</span>
           </div>

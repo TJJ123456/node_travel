@@ -2,9 +2,9 @@
   <div class="manage_page fillcontain">
     <el-row style="height: 100%;">
       <el-col :span="4" style="min-height: 100%; background-color: #324057;">
-        <el-menu :default-active="defaultActive" style="min-height: 100%;" theme="dark" router>
-          <el-menu-item index="manager">
-            <i class="el-icon-menu"></i>首页
+        <el-menu background-color="#324057" text-color="#bfcbd9" :default-active="defaultActive" style="min-height: 100%;" theme="dark" router>
+          <el-menu-item background-color="#48576a" index="manager">
+            <i class="el-icon-menu"></i>首页 
           </el-menu-item>
           <el-submenu index="2">
             <template slot="title">
@@ -24,6 +24,7 @@
             <el-menu-item index="entertainmentTypesList">娱乐分类列表</el-menu-item>
             <el-menu-item index="addEntertainment">添加娱乐</el-menu-item>
             <el-menu-item index="addEntertainmentType">添加娱乐分类</el-menu-item>
+            <el-menu-item index="enChart">娱乐数据图表</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
             <template slot="title">
@@ -33,6 +34,7 @@
             <el-menu-item index="spotTypesList">景点分类列表</el-menu-item>
             <el-menu-item index="addSpot">添加景点</el-menu-item>
             <el-menu-item index="addSpotType">添加景点分类</el-menu-item>
+            <el-menu-item index="spotChart">景点数据图表</el-menu-item>
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">
@@ -40,13 +42,14 @@
             </template>
             <el-menu-item index="checkList">审核列表</el-menu-item>
             <el-menu-item index="commentList">评论列表</el-menu-item>
+            <el-menu-item index="commentChart">评论数据图表</el-menu-item>
           </el-submenu>
           <el-submenu index="6">
             <template slot="title">
               <i class="el-icon-document"></i>用户管理
             </template>
             <el-menu-item index="userList">用户列表</el-menu-item>
-            <!-- <el-menu-item index="commentList">评论列表</el-menu-item> -->
+            <el-menu-item index="userChart">评论数据图表</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>

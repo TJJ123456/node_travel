@@ -71,18 +71,17 @@ export default {
       this.GetListCount();
     },
     async GetListCount() {
-      let data = await this.$fetch("spot/typecount");
+      let data = await this.$fetch("data/typecount");
       if (data.data !== this.count) {
         this.getList();
         this.count = data.data;
       }
     },
     async getList() {
-      let data = await this.$fetch("spot/typelist", {
+      let data = await this.$fetch("data/typelist", {
         method: "POST",
         body: JSON.stringify({
-          limit: this.limit,
-          offset: this.offset
+          kind: 0
         })
       });
       this.tableData = data.data;
@@ -125,7 +124,7 @@ export default {
       });
     },
     async changeFood() {
-      let data = await this.$fetch("entertainment/changetype", {
+      let data = await this.$fetch("data/changetype", {
         method: "POST",
         body: JSON.stringify(this.dialogForm)
       });

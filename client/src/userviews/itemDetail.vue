@@ -103,6 +103,7 @@
                         style="max-width: 159px; white-space: nowrap; overflow-wrap: normal; text-overflow: ellipsis; overflow: hidden;"
                       >xxx</a>
                     </p>
+                    <el-rate v-model="value" disabled show-score text-color="#ff9900"></el-rate>
                     <p class="info">
                       <span class="fr">人均￥413</span>
                       <span class="region">xxx路</span>
@@ -138,6 +139,7 @@ moment.locale("zh-cn");
 export default {
   data() {
     return {
+      value: 5,
       currentPage: 1,
       offset: 0,
       limit: 10,
@@ -184,7 +186,7 @@ export default {
       let list = await this.$fetch("comment/itemlist", {
         method: "POST",
         body: JSON.stringify({
-          id: this.id,
+          id: this.id
         })
       });
       this.commentList = list.data;
@@ -667,6 +669,7 @@ textarea {
   padding: 15px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  background-color: #fff;
   // margin-top: 15px;
 }
 #aside-bottom .midas-wrap {

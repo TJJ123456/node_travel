@@ -2,7 +2,7 @@
   <div>
     <headTop/>
     <section class="data_section">
-      <header class="section_title">美食数据图表</header>
+      <header class="section_title">用户数据图表</header>
     </section>
     <div class="line1">
       <div id="line1" class style="width: 100%;height:450px;"></div>
@@ -18,88 +18,59 @@ moment.locale("zh-cn");
 export default {
   data() {
     return {
-      foodList: [],
-      foodTypeList: []
+      userList: []
     };
   },
   mounted() {
     this.myChart1 = echarts.init(document.getElementById("line1"));
-    this.myChart2 = echarts.init(document.getElementById("line2"));
-    // this.drawLine();
+    // this.drawLine1();
   },
   watch: {
-    foodTypeList(val) {
+    userList(val) {
       this.drawLine1();
     }
   },
-  computed: {},
+  computed: {
+    title() {}
+  },
   activated() {
     this.initData();
   },
   methods: {
     async initData() {
-      let food = await this.$fetch("data/list", {
-        method: "POST",
-        body: JSON.stringify({
-          kind: 0
-        })
+      let user = await this.$fetch("user/list");
+      // });
+      // let type = await this.$fetch("data/typelist", {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     kind: this.type
+      //   })
+      // });
+      this.userList = user.data;
+      this.userList.sort((a, b) => {
+        return b.commentCount - a.commentCount;
       });
-      let type = await this.$fetch("data/typelist", {
-        method: "POST",
-        body: JSON.stringify({
-          kind: 0
-        })
-      });
-      this.foodList = food.data;
-      this.foodTypeList = type.data;
-      this.drawLine2();
+      // this.foodTypeList = type.data;
+      // this.drawLine2();
     },
     formatTime(time) {
       return moment(time).format("LL");
     },
     drawLine1() {
-      let typenameArr = [];
-      let typecountArr = [];
-      for (let i = 0; i < this.foodTypeList.length; ++i) {
-        let item = this.foodTypeList[i];
-        typenameArr.push(item.name);
-        typecountArr.push(item.count);
-      }
-      let option = {
-        title: {
-          text: "美食各分类数量"
-        },
-        xAxis: {
-          type: "category",
-          data: typenameArr
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: typecountArr,
-            type: "bar"
-          }
-        ]
-      };
-      this.myChart1.setOption(option);
-    },
-    drawLine2() {
-      let tmpArr = this.foodList.sort((a, b) => {
-        return b.commentCount - a.commentCount;
-      });
-      let arr = tmpArr.slice(0, 10);
+      console.log('当前数据', this.userList);
       let nameArr = [];
       let countArr = [];
+      let arr = this.userList.slice(0, 10);
       for (let i = 0; i < arr.length; ++i) {
         let item = arr[i];
-        nameArr.push(item.name);
+        nameArr.push(item.username);
         countArr.push(item.commentCount);
       }
+      console.log('名字数组', nameArr);
+
       let option = {
         title: {
-          text: "评论最多的美食店家(前10)"
+          text: '评论最多的用户'
         },
         xAxis: {
           type: "value"
@@ -116,7 +87,7 @@ export default {
           }
         ]
       };
-      this.myChart2.setOption(option);
+      this.myChart1.setOption(option);
     }
   }
 };

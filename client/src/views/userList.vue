@@ -4,6 +4,7 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="commentCount" label="评论数量"></el-table-column>
         <el-table-column prop="time" label="注册时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">

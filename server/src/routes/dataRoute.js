@@ -94,6 +94,7 @@ route.post('/list', async (req, res, next) => {
         let data = await Datas.find({ kind: kind }, {});
         for (let i in data) {
             data[i].typename = (await DataTypes.findOne({ _id: data[i].type })).name;
+            data[i].commentCount = await Comments.count({ itemid: data[i]._id });
         }
         res.json({
             data: data

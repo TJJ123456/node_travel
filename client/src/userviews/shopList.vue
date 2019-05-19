@@ -52,7 +52,7 @@
                 <li v-for="(item, index) in showList" :key="index">
                   <div class="pic">
                     <a @click="toDetail(0, item._id)">
-                      <img src="http://localhost:3000/public/img/default.jpg" alt>
+                      <img :src="getImgPath(item.filepath)" alt>
                     </a>
                   </div>
                   <div class="txt">
@@ -254,6 +254,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.offset = (val - 1) * this.limit;
+    },
+    getImgPath(path) {
+      if (path && path !== "") return "http://localhost:3000" + path;
+      return "http://localhost:3000/public/img/default.jpg";
     }
   },
   props: {

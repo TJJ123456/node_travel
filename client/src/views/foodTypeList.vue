@@ -4,7 +4,7 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="foodcount" label="美食数量"></el-table-column>
+        <el-table-column prop="count" label="美食数量"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -72,30 +72,36 @@ export default {
     async initData() {
       // this.getList();
       // await this.GetListCount();
-      let data = await this.$fetch("food/foodtypelist", {
+      let data = await this.$fetch("data/typelist", {
         method: "POST",
         body: JSON.stringify({
-          limit: this.limit,
-          offset: this.offset
+          kind: 0
         })
       });
       this.tableData = data.data;
-      let foodlist = await this.$fetch("food/foodlist");
+      let foodlist = await this.$fetch("data/list", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: 0
+        })
+      });
       this.foodList = foodlist.data;
     },
     async GetListCount() {
-      let data = await this.$fetch("food/foodtypecount");
+      let data = await this.$fetch("data/typecount");
       // if (data.data !== this.count) {
       //   this.getList();
       //   this.count = data.data;
       // }
     },
     async getList() {
-      let data = await this.$fetch("food/foodtypelist", {
+      let data = await this.$fetch("data/typelist", {
         method: "POST",
         body: JSON.stringify({
-          limit: this.limit,
-          offset: this.offset
+          method: "POST",
+          body: JSON.stringify({
+            kind: 0
+          })
         })
       });
       this.tableData = data.data;
@@ -106,7 +112,7 @@ export default {
       this.dialogForm = JSON.parse(JSON.stringify(this.tableData[index]));
     },
     async handleDelete(index, row) {
-      let data = await this.$fetch("food/deletetype", {
+      let data = await this.$fetch("data/deletetype", {
         method: "POST",
         body: JSON.stringify({
           id: this.tableData[index]._id
@@ -138,7 +144,7 @@ export default {
       });
     },
     async changeFood() {
-      let data = await this.$fetch("food/changetype", {
+      let data = await this.$fetch("data/changetype", {
         method: "POST",
         body: JSON.stringify(this.dialogForm)
       });

@@ -12,6 +12,10 @@ import addFood from './views/addFood.vue';
 import addHotel from './views/addHotel.vue';
 import addPlan from './views/addPlan.vue';
 import addSpot from './views/addSpot.vue';
+import enChart from './views/enChart.vue';
+import commentChart from './views/commentChart.vue';
+import userChart from './views/userChart.vue';
+import spotChart from './views/spotChart.vue';
 import addSpotType from './views/addSpotType.vue';
 import addFoodType from './views/addFoodType.vue';
 import foodList from './views/foodList.vue';
@@ -153,6 +157,26 @@ const routes = [
             path: '/foodChart',
             component: foodChart,
             meta: ['数据管理', '美食数据图表'],
+        },
+        {
+            path: '/enChart',
+            component: enChart,
+            meta: ['数据管理', '娱乐数据图表'],
+        },
+        {
+            path: '/commentChart',
+            component: commentChart,
+            meta: ['数据管理', '评论数据图表'],
+        },
+        {
+            path: '/userChart',
+            component: userChart,
+            meta: ['数据管理', '用户数据图表'],
+        },
+        {
+            path: '/spotChart',
+            component: spotChart,
+            meta: ['数据管理', '景点数据图表'],
         }, {
             path: '/foodtypeList',
             component: foodTypeList,

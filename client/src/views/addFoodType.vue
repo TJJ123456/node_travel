@@ -29,9 +29,10 @@ export default {
     return {
       ruleForm: {
         name: "",
+        kind: 0
       },
       rules: {
-        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }]
       }
     };
   },
@@ -64,7 +65,7 @@ export default {
           message: "创建美食分类成功",
           type: "success"
         });
-        this.resetForm('ruleForm');
+        this.resetForm("ruleForm");
         this.$router.push({ path: "/foodTypeList" });
       }
     },

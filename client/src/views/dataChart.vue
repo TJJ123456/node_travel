@@ -2,7 +2,7 @@
   <div>
     <headTop/>
     <section class="data_section">
-      <header class="section_title">美食数据图表</header>
+      <header class="section_title">{{title}}</header>
     </section>
     <div class="line1">
       <div id="line1" class style="width: 100%;height:450px;"></div>
@@ -16,6 +16,11 @@ import dtime from "time-formater";
 import moment from "moment";
 moment.locale("zh-cn");
 export default {
+  props: {
+    type: {
+      require: true
+    }
+  },
   data() {
     return {
       foodList: [],
@@ -32,7 +37,23 @@ export default {
       this.drawLine1();
     }
   },
-  computed: {},
+  computed: {
+    title() {
+      switch (this.type) {
+        case 0:
+          return "美食数据图表";
+          break;
+        case 1:
+          return "娱乐数据图表";
+          break;
+        case 2:
+          return "景点数据图表";
+          break;
+        default:
+          break;
+      }
+    }
+  },
   activated() {
     this.initData();
   },
@@ -41,13 +62,13 @@ export default {
       let food = await this.$fetch("data/list", {
         method: "POST",
         body: JSON.stringify({
-          kind: 0
+          kind: this.type
         })
       });
       let type = await this.$fetch("data/typelist", {
         method: "POST",
         body: JSON.stringify({
-          kind: 0
+          kind: this.type
         })
       });
       this.foodList = food.data;
@@ -67,7 +88,7 @@ export default {
       }
       let option = {
         title: {
-          text: "美食各分类数量"
+          text: "各分类数量"
         },
         xAxis: {
           type: "category",
@@ -92,6 +113,20 @@ export default {
       let arr = tmpArr.slice(0, 10);
       let nameArr = [];
       let countArr = [];
+      let text = "";
+      switch (this.type) {
+        case 0:
+          text = "评论最多的美食店家(前10)";
+          break;
+        case 1:
+          text = "评论最多的娱乐店家(前10)";
+          break;
+        case 2:
+          text = "评论最多的景点(前10)";
+          break;
+        default:
+          break;
+      }
       for (let i = 0; i < arr.length; ++i) {
         let item = arr[i];
         nameArr.push(item.name);
@@ -99,7 +134,7 @@ export default {
       }
       let option = {
         title: {
-          text: "评论最多的美食店家(前10)"
+          text: text
         },
         xAxis: {
           type: "value"

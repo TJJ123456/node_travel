@@ -20,7 +20,7 @@
             <el-input v-model="ruleForm.address"></el-input>
           </el-form-item>
           <el-form-item label="食品分类" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择食品分类">
+            <el-select v-model="ruleForm.type" placeholder="请选择分类">
               <el-option
                 v-for="(item, index) in typelist"
                 :key="index"
@@ -32,7 +32,7 @@
           <el-form-item label="电话" prop="phone">
             <el-input v-model.number="ruleForm.phone"></el-input>
           </el-form-item>
-          <el-form-item label="上传美食图片" prop="filepath">
+          <el-form-item label="上传图片" prop="filepath">
             <el-upload
               class="avatar-uploader"
               ref="upload"
@@ -71,11 +71,12 @@ export default {
         address: "",
         type: "",
         filepath: "",
-        phone: ""
+        phone: "",
+        kind: 0
       },
       rules: {
-        name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
-        desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        desc: [{ required: true, message: "请输入描述", trigger: "blur" }],
         type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
         address: [{ required: true, message: "地址不能为空", trigger: "blur" }],
         phone: [
@@ -93,7 +94,12 @@ export default {
   },
   methods: {
     async initData() {
-      let data = await this.$fetch("food/foodtypelist");
+      let data = await this.$fetch("data/typelist", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: 0
+        })
+      });
       this.typelist = data.data;
     },
     onSubmit(formName) {
@@ -108,7 +114,7 @@ export default {
       });
     },
     async createFood() {
-      let data = await this.$fetch("food/create", {
+      let data = await this.$fetch("data/create", {
         method: "POST",
         body: JSON.stringify(this.ruleForm)
       });
@@ -121,7 +127,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "创建美食成功",
+          message: "创建成功",
           type: "success"
         });
         this.resetForm("ruleForm");

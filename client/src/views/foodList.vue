@@ -2,9 +2,35 @@
   <div class="fillcontain">
     <headTop/>
     <div class="table_container">
-      <el-table v-loading="loading" :data="tableData" style="width: 100%">
+      <el-table v-loading="loading" :data="showList" style="width: 100%">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="店铺名称">
+                <span>{{ props.row.name }}</span>
+              </el-form-item>
+              <el-form-item label="店铺地址">
+                <span>{{ props.row.address }}</span>
+              </el-form-item>
+              <el-form-item label="店铺介绍">
+                <span>{{ props.row.desc }}</span>
+              </el-form-item>
+              <el-form-item label="联系电话">
+                <span>{{ props.row.phone }}</span>
+              </el-form-item>
+              <el-form-item label="评分">
+                <span>{{ props.row.score }}</span>
+              </el-form-item>
+              <el-form-item label="人均消费">
+                <span>{{ props.row.avg }}</span>
+              </el-form-item>
+              <el-form-item label="分类">
+                <span>{{ props.row.typename }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="desc" label="描述"></el-table-column>
         <el-table-column prop="typename" label="类型"></el-table-column>
         <el-table-column prop="address" label="地址"></el-table-column>
         <el-table-column prop="phone" label="电话"></el-table-column>
@@ -21,7 +47,7 @@
           :current-page="currentPage"
           :page-size="10"
           layout="total, prev, pager, next"
-          :total="count"
+          :total="tableData.length"
         ></el-pagination>
       </div>
       <el-dialog title="修改美食信息" :visible.sync="dialogFormVisible">
@@ -81,6 +107,7 @@ export default {
   data() {
     return {
       typelist: [],
+      commentList: [],
       editIndex: 0,
       currentPage: 1,
       offset: 0,
@@ -91,8 +118,8 @@ export default {
       loading: false,
       dialogForm: {},
       dialogFormrules: {
-        name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
-        desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        desc: [{ required: true, message: "请输入描述", trigger: "blur" }],
         type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
         address: [{ required: true, message: "地址不能为空", trigger: "blur" }],
         phone: [
@@ -108,30 +135,58 @@ export default {
   activated() {
     this.GetListCount();
   },
+  computed: {
+    showList() {
+      let list = this.tableData;
+      return list.slice(this.offset, this.offset + 10);
+    }
+  },
   watch: {},
   methods: {
     async initData() {
-      let data = await this.$fetch("food/foodtypelist");
-      this.typelist = data.data;
-      // this.getList();
       this.GetListCount();
+
+      let data = await this.$fetch("data/typelist", {});
+      let comment = await this.$fetch("comment/passlist");
+      this.commentList = comment.data;
+      this.typelist = data.data;
+      this.tableData.forEach(item => {
+        item.score = parseFloat(this.getScore(item._id)) || 0;
+        item.avg = parseFloat(this.getaverage(item._id)) || 0;
+      });
+      // this.getList();
+    },
+    getaverage(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.average;
+      });
+      return (sum / itemArr.length).toFixed(1);
+    },
+    getScore(itemid) {
+      let itemArr = this.commentList.filter(item => item.itemid === itemid);
+      let sum = 0;
+      itemArr.forEach(item => {
+        sum += item.score;
+      });
+      return (sum / itemArr.length).toFixed(1);
     },
     getTypeName(id) {
       return this.typelist.find(item => item._id === id).name;
     },
     async GetListCount() {
-      let data = await this.$fetch("food/foodcount");
+      let data = await this.$fetch("data/count");
       if (data.data !== this.count) {
         this.getList();
         this.count = data.data;
       }
     },
     async getList() {
-      let data = await this.$fetch("food/foodlist", {
+      let data = await this.$fetch("data/list", {
         method: "POST",
         body: JSON.stringify({
-          limit: this.limit,
-          offset: this.offset
+          kind: 0
         })
       });
       this.tableData = data.data;
@@ -142,7 +197,7 @@ export default {
       this.dialogForm = JSON.parse(JSON.stringify(this.tableData[index]));
     },
     async handleDelete(index, row) {
-      let data = await this.$fetch("food/delete", {
+      let data = await this.$fetch("data/delete", {
         method: "POST",
         body: JSON.stringify({
           id: this.tableData[index]._id
@@ -157,7 +212,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "删除美食成功",
+          message: "删除成功",
           type: "success"
         });
         this.tableData.splice(index, 1);
@@ -174,7 +229,7 @@ export default {
       });
     },
     async changeFood() {
-      let data = await this.$fetch("food/change", {
+      let data = await this.$fetch("data/change", {
         method: "POST",
         body: JSON.stringify(this.dialogForm)
       });
@@ -187,7 +242,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "修改美食信息成功",
+          message: "修改信息成功",
           type: "success"
         });
         this.tableData[this.editIndex] = JSON.parse(
@@ -259,5 +314,17 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
 }
 </style>

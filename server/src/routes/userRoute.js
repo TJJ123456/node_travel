@@ -1,4 +1,4 @@
-import { Users } from '../providers'
+import { Users, Comments } from '../providers'
 import express from 'express'
 const route = express.Router();
 import bcrypt from 'bcryptjs'
@@ -121,6 +121,9 @@ route.get('/todaycount', async (req, res, next) => {
 route.get('/list', async (req, res, next) => {
     try {
         let data = await Users.find({});
+        for (let i in data) {
+            data[i].commentCount = await Comments.count({ userid: data[i]._id });
+        }
         res.json({
             data: data
         });
@@ -135,6 +138,9 @@ route.post('/list', async (req, res, next) => {
     const offset = req.body.offset;
     try {
         let data = await Users.find({}, { limit: limit, skip: offset });
+        for (let i in data) {
+            data[i].commentCount = await Comments.count({ userid: data[i]._id });
+        }
         res.json({
             data: data
         });

@@ -2,7 +2,7 @@
   <div>
     <el-row style="margin-top: 20px;">
       <el-col :span="14" :offset="4">
-        <header class="form_header">添加景点</header>
+        <header class="form_header">添加娱乐</header>
         <el-form
           :model="ruleForm"
           :rules="rules"
@@ -10,7 +10,7 @@
           label-width="110px"
           class="form food_form"
         >
-          <el-form-item label="娱乐名称" prop="name">
+          <el-form-item label="名称" prop="name">
             <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="描述" prop="desc" type="textarea">
@@ -20,7 +20,7 @@
             <el-input v-model="ruleForm.address"></el-input>
           </el-form-item>
           <el-form-item label="娱乐分类" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择娱乐分类">
+            <el-select v-model="ruleForm.type" placeholder="请选择分类">
               <el-option
                 v-for="(item, index) in typelist"
                 :key="index"
@@ -32,7 +32,7 @@
           <el-form-item label="电话" prop="phone">
             <el-input v-model.number="ruleForm.phone"></el-input>
           </el-form-item>
-          <el-form-item label="上传店家图片" prop="filepath">
+          <el-form-item label="上传图片" prop="filepath">
             <el-upload
               class="avatar-uploader"
               ref="upload"
@@ -52,7 +52,7 @@
           </el-form-item>
           <el-form-item>
             <el-row type="flex" justify="center">
-              <el-button type="primary" @click="onSubmit('ruleForm')">新建娱乐</el-button>
+              <el-button type="primary" @click="onSubmit('ruleForm')">创建娱乐</el-button>
             </el-row>
           </el-form-item>
         </el-form>
@@ -71,7 +71,8 @@ export default {
         address: "",
         type: "",
         filepath: "",
-        phone: ""
+        phone: "",
+        kind: 1
       },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
@@ -93,7 +94,12 @@ export default {
   },
   methods: {
     async initData() {
-      let data = await this.$fetch("entertainment/typelist");
+      let data = await this.$fetch("data/typelist", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: 1
+        })
+      });
       this.typelist = data.data;
     },
     onSubmit(formName) {
@@ -108,7 +114,7 @@ export default {
       });
     },
     async createFood() {
-      let data = await this.$fetch("entertainment/create", {
+      let data = await this.$fetch("data/create", {
         method: "POST",
         body: JSON.stringify(this.ruleForm)
       });
@@ -121,7 +127,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "创建娱乐成功",
+          message: "创建成功",
           type: "success"
         });
         this.resetForm("ruleForm");

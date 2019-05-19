@@ -4,6 +4,7 @@
     <div class="table_container">
       <el-table v-loading="loading" :data="tableData" style="width: 100%">
         <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="count" label="数量"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -17,10 +18,10 @@
           :current-page="currentPage"
           :page-size="10"
           layout="total, prev, pager, next"
-          :total="count"
+          :total="tableData.length"
         ></el-pagination>
       </div>
-      <el-dialog title="修改娱乐分类信息" :visible.sync="dialogFormVisible">
+      <el-dialog title="修改分类信息" :visible.sync="dialogFormVisible">
         <el-form :rules="dialogFormrules" :model="dialogForm" ref="dialogForm">
           <el-form-item label="名称" prop="name">
             <el-input v-model="dialogForm.name" autocomplete="off"></el-input>
@@ -39,6 +40,7 @@
 export default {
   data() {
     return {
+      foodList: [],
       editIndex: 0,
       currentPage: 1,
       offset: 0,
@@ -50,6 +52,7 @@ export default {
       dialogForm: {},
       dialogFormrules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        desc: [{ required: true, message: "请输入描述", trigger: "blur" }],
         type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
         price: [
           { required: true, message: "价格不能为空", trigger: "blur" },
@@ -58,31 +61,47 @@ export default {
       }
     };
   },
-  created() {
-    this.initData();
-  },
+  // created() {
+  //   this.initData();
+  // },
   activated() {
-    this.GetListCount();
+    this.initData();
   },
   watch: {},
   methods: {
     async initData() {
       // this.getList();
-      this.GetListCount();
-    },
-    async GetListCount() {
-      let data = await this.$fetch("entertainment/typecount");
-      if (data.data !== this.count) {
-        this.getList();
-        this.count = data.data;
-      }
-    },
-    async getList() {
-      let data = await this.$fetch("entertainment/typelist", {
+      // await this.GetListCount();
+      let data = await this.$fetch("data/typelist", {
         method: "POST",
         body: JSON.stringify({
-          limit: this.limit,
-          offset: this.offset
+          kind: 1
+        })
+      });
+      this.tableData = data.data;
+      let foodlist = await this.$fetch("data/list", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: 1
+        })
+      });
+      this.foodList = foodlist.data;
+    },
+    async GetListCount() {
+      let data = await this.$fetch("data/typecount");
+      // if (data.data !== this.count) {
+      //   this.getList();
+      //   this.count = data.data;
+      // }
+    },
+    async getList() {
+      let data = await this.$fetch("data/typelist", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "POST",
+          body: JSON.stringify({
+            kind: 1
+          })
         })
       });
       this.tableData = data.data;
@@ -93,7 +112,7 @@ export default {
       this.dialogForm = JSON.parse(JSON.stringify(this.tableData[index]));
     },
     async handleDelete(index, row) {
-      let data = await this.$fetch("entertainment/deletetype", {
+      let data = await this.$fetch("data/deletetype", {
         method: "POST",
         body: JSON.stringify({
           id: this.tableData[index]._id
@@ -108,7 +127,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "删除娱乐分类成功",
+          message: "删除分类成功",
           type: "success"
         });
         this.tableData.splice(index, 1);
@@ -125,7 +144,7 @@ export default {
       });
     },
     async changeFood() {
-      let data = await this.$fetch("entertainment/changetype", {
+      let data = await this.$fetch("data/changetype", {
         method: "POST",
         body: JSON.stringify(this.dialogForm)
       });
@@ -138,7 +157,7 @@ export default {
       } else {
         this.$message({
           showClose: true,
-          message: "修改娱乐分类成功",
+          message: "修改分类成功",
           type: "success"
         });
         this.tableData[this.editIndex] = JSON.parse(

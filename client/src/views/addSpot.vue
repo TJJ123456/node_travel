@@ -71,7 +71,8 @@ export default {
         address: "",
         type: "",
         filepath: "",
-        phone: ""
+        phone: "",
+        kind: 2
       },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
@@ -93,7 +94,12 @@ export default {
   },
   methods: {
     async initData() {
-      let data = await this.$fetch("spot/typelist");
+      let data = await this.$fetch("data/typelist", {
+        method: "POST",
+        body: JSON.stringify({
+          kind: 2
+        })
+      });
       this.typelist = data.data;
     },
     onSubmit(formName) {
@@ -108,7 +114,7 @@ export default {
       });
     },
     async createFood() {
-      let data = await this.$fetch("spot/create", {
+      let data = await this.$fetch("data/create", {
         method: "POST",
         body: JSON.stringify(this.ruleForm)
       });

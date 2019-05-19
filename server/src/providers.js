@@ -233,7 +233,7 @@ async function createCommentRandom() {
 
 async function initData() {
   // await createDataType();
-  await createData();
+  // await createData();
   await createCommentRandom();
 }
 

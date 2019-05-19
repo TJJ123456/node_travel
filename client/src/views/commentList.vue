@@ -2,7 +2,7 @@
   <div class="fillcontain">
     <headTop/>
     <div class="table_container">
-      <el-table v-loading="loading" :data="tableData" style="width: 100%">
+      <el-table v-loading="loading" :data="showList" style="width: 100%">
         <el-table-column prop="shopname" label="商家名称"></el-table-column>
         <el-table-column prop="username" label="用户名"></el-table-column>
         <el-table-column prop="time" label="时间"></el-table-column>
@@ -19,11 +19,11 @@
           :current-page="currentPage"
           :page-size="10"
           layout="total, prev, pager, next"
-          :total="count"
+          :total="tableData.length"
         ></el-pagination>
       </div>
-      <el-dialog title="修改美食分类信息" :visible.sync="dialogFormVisible">
-        <el-form :rules="dialogFormrules" :model="dialogForm" ref="dialogForm">
+      <el-dialog title="评论详细信息" :visible.sync="dialogFormVisible">
+        <el-form :model="dialogForm" ref="dialogForm">
           <div>
             <span>商家名称：{{dialogForm.shopname}}</span>
           </div>
@@ -60,20 +60,17 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       loading: false,
-      dialogForm: {},
-      dialogFormrules: {
-        name: [{ required: true, message: "请输入食品名称", trigger: "blur" }],
-        desc: [{ required: true, message: "请输入食品描述", trigger: "blur" }],
-        type: [{ required: true, message: "类型不能为空", trigger: "blur" }],
-        price: [
-          { required: true, message: "价格不能为空", trigger: "blur" },
-          { type: "number", message: "价格必须为数字值" }
-        ]
-      }
+      dialogForm: {}
     };
   },
-  created() {
-    this.initData();
+  // created() {
+  //   this.initData();
+  // },
+  computed: {
+    showList() {
+      let list = this.tableData;
+      return list.slice(this.offset, this.offset + 10);
+    }
   },
   activated() {
     this.initData();
@@ -107,12 +104,12 @@ export default {
           return false;
         }
       });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.offset = (val - 1) * this.limit;
+      this.getList();
     }
-  },
-  handleCurrentChange(val) {
-    this.currentPage = val;
-    this.offset = (val - 1) * this.limit;
-    this.getList();
   }
 };
 </script>

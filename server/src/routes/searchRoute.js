@@ -6,14 +6,14 @@ route.post('/', async (req, res, next) => {
     try {
         const keyword = req.body.keyword;
         let regex = new RegExp(keyword);
-        let data = await data.find({
+        let data = await Datas.find({
             $or: [
                 { "name": regex }, { "desc": regex }, { "address": regex }
             ]
         });
-        for (let i = 0; i < data1.length; ++i) {
-            let type = await DataTypes.findOne({ _id: data1[i].type });
-            data1[i].typename = type.name;
+        for (let i = 0; i < data.length; ++i) {
+            let type = await DataTypes.findOne({ _id: data[i].type });
+            data[i].typename = type.name;
         }
         res.json({ data: data });
     } catch (e) {

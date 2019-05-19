@@ -29,9 +29,10 @@ export default {
     return {
       ruleForm: {
         name: "",
+        kind: 1
       },
       rules: {
-        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }],
+        name: [{ required: true, message: "请输入分类名称", trigger: "blur" }]
       }
     };
   },
@@ -48,7 +49,7 @@ export default {
       });
     },
     async createFood() {
-      let data = await this.$fetch("entertainment/createtype", {
+      let data = await this.$fetch("data/createtype", {
         method: "POST",
         body: JSON.stringify(this.ruleForm)
       });
@@ -64,7 +65,7 @@ export default {
           message: "创建娱乐分类成功",
           type: "success"
         });
-        this.resetForm('ruleForm');
+        this.resetForm("ruleForm");
         this.$router.push({ path: "/entertainmentTypesList" });
       }
     },

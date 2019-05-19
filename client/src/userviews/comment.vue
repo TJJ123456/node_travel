@@ -55,7 +55,6 @@ export default {
         score: 0,
         average: "",
         content: "",
-        // type: parseInt(this.type),
         itemid: this.id
       },
       rules: {
@@ -77,26 +76,13 @@ export default {
   created() {},
   methods: {
     async initData() {
-      switch (parseInt(this.type)) {
-        case 0:
-          this.item = (await this.$fetch("food/getfood", {
-            method: "POST",
-            body: JSON.stringify({
-              id: this.id
-            })
-          })).data;
-          break;
-        case 1:
-          this.item = (await this.$fetch("entertainment/get", {
-            method: "POST",
-            body: JSON.stringify({
-              id: this.id
-            })
-          })).data;
-          break;
-        case 2:
-          break;
-      }
+      let item = await this.$fetch("data/get", {
+        method: "POST",
+        body: JSON.stringify({
+          id: this.id
+        })
+      });
+      this.item = item.data;
     },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {

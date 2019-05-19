@@ -65,7 +65,10 @@ route.get('/list', async (req, res, next) => {
                 data[i].username = '用户不存在';
             }
             let doc = await Datas.findOne({ _id: data[i].itemid });
-            if (doc) data[i].shopname = doc.name;
+            if (doc) {
+                data[i].shopname = doc.name;
+                data[i].kind = doc.kind;
+            }
             else data[i].shopname = '美食不存在';
 
         }
