@@ -74,10 +74,13 @@ export default {
     },
     checkRoute() {
       console.log("/home/myview" !== this.$route.path, this.$route.params.path);
-      return "/home/myview" !== this.$route.path;
+      return (
+        "/home/myview" !== this.$route.path &&
+        "/home/login" !== this.$route.path &&
+        "/home/fortgetpassword" !== this.$route.path
+      );
     },
     toSearch() {
-      console.log("xxxxxxxxxxxxxxx", this.keyword);
       if (this.keyword === "") {
         return;
       }

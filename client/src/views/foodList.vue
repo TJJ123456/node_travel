@@ -2,7 +2,7 @@
   <div class="fillcontain">
     <headTop/>
     <div class="table_container">
-      <el-table v-loading="loading" :data="showList" style="width: 100%">
+      <el-table border v-loading="loading" :data="showList" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -135,6 +135,7 @@ export default {
   activated() {
     this.GetListCount();
   },
+  
   computed: {
     showList() {
       let list = this.tableData;

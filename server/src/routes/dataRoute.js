@@ -42,7 +42,15 @@ route.post('/get', async (req, res, next) => {
         if (!data) {
             throw new Error('没有这个');
         }
-        res.json({ data: data })
+
+        let str = data.address.slice(0, 3);
+        let regex = new RegExp(str);
+        let nearbyList = await Datas.find({
+            $or: [
+                { "name": regex }, { "desc": regex }, { "address": regex }
+            ]
+        }, { limit: 5 });
+        res.json({ data: data, nearbyList: nearbyList })
     } catch (e) {
         console.log(e.message);
         res.status(405).send(e.message);
@@ -108,7 +116,7 @@ route.post('/list', async (req, res, next) => {
 route.post('/typelist', async (req, res, next) => {
     const kind = req.body.kind;
     try {
-        let data = await DataTypes.find({kind: kind}, {});
+        let data = await DataTypes.find({ kind: kind }, {});
         for (let i in data) {
             data[i].count = await Datas.count({ type: data[i]._id });
         }

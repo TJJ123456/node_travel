@@ -7,6 +7,10 @@ async function getByname(name) {
     return await Users.findOne({ name })
 }
 
+const questionList = [
+    '桂林电子科技大学的校训是',
+    '你的大学名字是'
+]
 
 const SALT_ROUNDS = 10
 
@@ -33,7 +37,7 @@ async function hashPassword(password) {
     return await bcrypt.hash(password, SALT_ROUNDS)
 }
 
-async function createUser({ username, password }) {
+async function createUser({ username, password, question, answer }) {
     const user = await getByUsername(username)
     if (user) {
         throw new Error('用户名已注册')
@@ -43,12 +47,81 @@ async function createUser({ username, password }) {
         const result = await Users.insert({
             username,
             password: hash,
+            question,
+            answer,
             createTime: time.getTime(),
         })
 
         return result
     }
 }
+
+route.post('/resetpassword', async (req, res, next) => {
+    try {
+        console.log(req.body);
+        const username = req.body.username;
+        const question = req.body.question;
+        const answer = req.body.answer;
+        const password = req.body.password;
+        const user = await getByUsername(username);
+        if (user) {
+            const hash = await hashPassword(password)
+            await Users.updateOne({ _id: user._id }, { $set: { 'password': hash } });
+            res.json({ status: 'ok' });
+        } else {
+            throw new Error('用户名不存在')
+        }
+    } catch (e) {
+        console.log(e.message);
+        res.status(405).send(e.message);
+    }
+})
+
+route.post('/checkquestion', async (req, res, next) => {
+    try {
+        const username = req.body.username;
+        const question = req.body.question;
+        const answer = req.body.answer;
+        const user = await getByUsername(username)
+        if (user) {
+            if (question === user.question && answer === user.answer) {
+                res.json({ status: 'ok' })
+            } else {
+                throw new Error('问题或答案错误');
+            }
+        } else {
+            throw new Error('用户名不存在')
+        }
+    } catch (e) {
+        console.log(e.message);
+        res.status(405).send(e.message);
+    }
+})
+
+route.post('/checkusername', async (req, res, next) => {
+    try {
+        const username = req.body.username;
+        const user = await getByUsername(username)
+        if (user) {
+            let data = questionList;
+            res.json({ data: data })
+        } else {
+            throw new Error('用户名不存在')
+        }
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
+
+route.get('/question', async (req, res, next) => {
+    try {
+        // const newDoc = await createUser(req.body);
+        let data = questionList;
+        res.json({ data: data })
+    } catch (e) {
+        res.status(405).send(e.message);
+    }
+})
 
 route.get('/', (req, res) => {
     if (!req.session.user) {

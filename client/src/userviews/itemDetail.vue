@@ -119,11 +119,14 @@
             </h2>
             <div class="J-panel">
               <u class="list">
-                <li class="item">
+                <li class="item" v-for="(item, index) in nearbyList" :key="index">
                   <a class="pic">
-                    <img src="http://localhost:3000/public/img/logo.png" alt>
+                    <img :src="getImgPath(item.filepath)" alt>
                   </a>
-                  <a class="title" style="position:relative;left:0;top:0;text-decoration:none;">绿茶</a>
+                  <a
+                    class="title"
+                    style="position:relative;left:0;top:0;text-decoration:none;"
+                  >{{item.name}}</a>
                 </li>
               </u>
             </div>
@@ -145,6 +148,7 @@ export default {
       limit: 10,
       item: {},
       commentList: [],
+      nearbyList: [],
       myComment: {
         score: null,
         average: null,
@@ -183,6 +187,7 @@ export default {
         })
       });
       this.item = item.data;
+      this.nearbyList = item.nearbyList;
       let list = await this.$fetch("comment/itemlist", {
         method: "POST",
         body: JSON.stringify({
@@ -218,6 +223,10 @@ export default {
         name: "comment",
         params: { type: this.type, id: this.id }
       });
+    },
+    getImgPath(path) {
+      if (path && path !== "") return "http://localhost:3000" + path;
+      return "http://localhost:3000/public/img/default.jpg";
     },
     async createComment() {
       if (!this.myComment.average) {

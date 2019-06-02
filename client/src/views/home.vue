@@ -114,7 +114,6 @@ export default {
         const date = dtime(new Date().getTime() - 86400000 * i).format(
           "YYYY-MM-DD"
         );
-        // const date = (new Date().getTime() - 86400000 * i).format("YYYY-MM-DD");
         sevenDay.push(date);
       }
 

@@ -39,6 +39,7 @@ import userhome from './userviews/userhome.vue';
 import userLayout from './userviews/userLayout.vue';
 import userPlanList from './userviews/userPlanList.vue';
 import userLogin from './userviews/login.vue';
+import fortgetPassword from './userviews/fortgetPassword.vue';
 import myview from './userviews/myview.vue';
 import planDetail from './userviews/planDetail.vue';
 import uplanList from './userviews/planList.vue';
@@ -77,6 +78,12 @@ const routes = [
             path: '/home/login',
             name: 'userLogin',
             component: userLogin,
+            meta: [],
+        },
+        {
+            path: '/home/fortgetpassword',
+            name: 'fortgetPassword',
+            component: fortgetPassword,
             meta: [],
         },
         {
